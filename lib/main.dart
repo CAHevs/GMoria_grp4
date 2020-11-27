@@ -56,17 +56,61 @@ abstract class ListItem {
 
 }
 
-/// A ListItem that contains data to display a heading.
+/// A ListItem that contains data to display.
 class HeadingItem implements ListItem {
   final String heading;
+  final String score = '10/20';
+  final String scoreHeading = 'Last score';
 
   HeadingItem(this.heading);
 
   Widget buildTitle(BuildContext context) {
-    return Text(
-      heading,
-      style: Theme.of(context).textTheme.headline5,
-    );
+    return 
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Container(
+          child: Row(
+            children: [
+              Text(
+                heading,
+                style: Theme.of(context).textTheme.headline5,
+                )
+                
+            ],)
+        ),
+        Container(
+          child: Row(children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  scoreHeading,
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    color: Colors.black87
+                  ),
+                ),
+                Text(
+                  score,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.black54
+                  ),
+                ),
+              ],),
+              Column(crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconButton(icon: Icon(Icons.play_circle_outline), 
+                    disabledColor: Colors.red,
+                    iconSize: 45,
+                    onPressed: null)
+              ],)
+          ],)
+
+        )
+        
+      ]);
+
+    
   }
 }
 
@@ -80,19 +124,56 @@ class MessageItem implements ListItem {
   Widget buildTitle(BuildContext context) => Text(sender);
 }
 
-class ListPage extends StatelessWidget{
+class ListPageItem implements ListItem {
+  final String text;
 
+   ListPageItem(this.text);
+
+  Widget buildTitle(BuildContext context){
+    return
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+          Text(
+            text
+          )
+      ],
+      );
+  }
+}
+
+class ListPage extends StatelessWidget{
+  final List<ListItem> items = List<ListItem>.generate(
+      5,
+      (i) => ListPageItem("item $i")
+    );
   final int indexCaller;
   ListPage(this.indexCaller);
+  
+
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Inside the list "+indexCaller.toString()),
-        
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Inside the list "+indexCaller.toString()),
+        ),
+        body: ListView.builder(
+          // Let the ListView know how many items it needs to build.
+          itemCount: items.length,
+          // Provide a builder function. This is where the magic happens.
+          // Convert each item into a widget based on the type of item it is.
+          itemBuilder: (context, index) {
+            final item = items[index];
+
+            return ListTile(
+              title: item.buildTitle(context),
+            );
+          },
+        ),
       ),
     );
+    
   }
   
 }
