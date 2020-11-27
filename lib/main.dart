@@ -4,7 +4,7 @@ void main() {
   runApp(MyApp(
     items: List<ListItem>.generate(
       5,
-      (i) => HeadingItem("List $i")
+      (i) => MainPageItem("List $i")
     ),
   ));
 }
@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = 'GMoria Group 4';
+    final persons = List<ListItem>.generate(2, (index) => (HeadingItem("Person $index")));
 
     return MaterialApp(
       title: title,
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
           itemBuilder: (context, index) {
             final item = items[index];
 
+
             return ListTile(
               title: item.buildTitle(context),
               onLongPress: () => Scaffold
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
                 .showSnackBar(SnackBar(content: Text("You clicked on the list " + index.toString()))),
               onTap: (){
                  Navigator.push(context, 
-                 MaterialPageRoute(builder: (context) => ListPage(index)),);
+                 MaterialPageRoute(builder: (context) => ListPage(index, persons)),);
               },
             );
           },
@@ -56,13 +58,26 @@ abstract class ListItem {
 
 }
 
-/// A ListItem that contains data to display.
+/// A ListItem that contains data to display a heading.
 class HeadingItem implements ListItem {
+  final String heading;
+
+  HeadingItem(this.heading);
+
+  Widget buildTitle(BuildContext context) {
+    return Text(
+      heading,
+      style: Theme.of(context).textTheme.headline5,
+    );
+  }
+}
+
+class MainPageItem implements ListItem {
   final String heading;
   final String score = '10/20';
   final String scoreHeading = 'Last score';
 
-  HeadingItem(this.heading);
+  MainPageItem(this.heading);
 
   Widget buildTitle(BuildContext context) {
     return 
@@ -102,7 +117,9 @@ class HeadingItem implements ListItem {
                 IconButton(icon: Icon(Icons.play_circle_outline), 
                     disabledColor: Colors.red,
                     iconSize: 45,
-                    onPressed: null)
+                    onPressed: () => Scaffold
+                .of(context)
+                .showSnackBar(SnackBar(content: Text("testtedstds"))))
               ],)
           ],)
 
@@ -124,56 +141,109 @@ class MessageItem implements ListItem {
   Widget buildTitle(BuildContext context) => Text(sender);
 }
 
-class ListPageItem implements ListItem {
-  final String text;
-
-   ListPageItem(this.text);
-
-  Widget buildTitle(BuildContext context){
-    return
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-          Text(
-            text
-          )
-      ],
-      );
-  }
-}
-
 class ListPage extends StatelessWidget{
-  final List<ListItem> items = List<ListItem>.generate(
-      5,
-      (i) => ListPageItem("item $i")
-    );
-  final int indexCaller;
-  ListPage(this.indexCaller);
-  
 
+  final int indexCaller;
+  final List<ListItem> persons;
+  ListPage(this.indexCaller, this.persons);
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Inside the list "+indexCaller.toString()),
-        ),
-        body: ListView.builder(
-          // Let the ListView know how many items it needs to build.
-          itemCount: items.length,
-          // Provide a builder function. This is where the magic happens.
-          // Convert each item into a widget based on the type of item it is.
-          itemBuilder: (context, index) {
-            final item = items[index];
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Inside the list "+indexCaller.toString()),
+        
+      ),
+      body: ListView.builder(
+        itemCount: persons.length,
+        itemBuilder: (context, index) {
+            final item = persons[index];
 
             return ListTile(
               title: item.buildTitle(context),
+              onTap: (){
+                 Navigator.push(context, 
+                 MaterialPageRoute(builder: (context) => PersonCard(persons.elementAt(index).toString())));
+              },
             );
           },
-        ),
       ),
     );
-    
   }
   
+}
+
+class PersonCard extends StatelessWidget{
+
+  final String personName; 
+  PersonCard(this.personName); 
+  
+  @override
+  Widget build(BuildContext context) {
+     return Scaffold(
+      appBar: AppBar(
+        title: Text(personName + " Card"),
+        
+      ),
+      body: Center(child: buildInfoCard(context)
+      ),
+    );
+  }
+  
+  Widget buildInfoCard(BuildContext context) => Column (
+    mainAxisAlignment: MainAxisAlignment.start, 
+    children: <Widget>[
+      Align(alignment: Alignment.bottomRight,
+      child: IconButton(icon: Icon(Icons.info_outline),
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PersonDetails()));
+        }),),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset('images/hell_dice.png'),
+        ),
+      Padding(
+        padding: EdgeInsets.all(30),
+        child: Text('Name of the person'),
+      ),
+    ],
+  );
+}
+
+//Class for the page with all the information regarding a person
+class PersonDetails extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+   return Scaffold(
+      appBar: AppBar(
+        title: Text("Firstname Lastname"),
+      ),
+      body: Center(child:  buildAllInformation(),),
+    );
+  }
+
+  //Widget that will build all the fields
+  Widget buildAllInformation() => Column(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: <Widget>[
+      ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset('images/hell_dice.png'),
+      ),
+      Text('Email'),
+      Text('Phone number'),
+      Container(width: 300, child: 
+        TextField(
+          keyboardType: TextInputType.multiline, 
+          maxLines: null, 
+          decoration: new InputDecoration(
+            border: new OutlineInputBorder(
+              borderSide: new BorderSide(color: Colors.grey)
+            ),
+            hintText: 'Add notes regarding the person',
+            labelText: 'Notes'
+          ),)
+      )
+    ],
+  );
 }
