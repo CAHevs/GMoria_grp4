@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = 'GMoria Group 4';
+    final persons = List<ListItem>.generate(2, (index) => (HeadingItem("Person $index")));
 
     return MaterialApp(
       title: title,
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
           itemBuilder: (context, index) {
             final item = items[index];
 
+
             return ListTile(
               title: item.buildTitle(context),
               onLongPress: () => Scaffold
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
                 .showSnackBar(SnackBar(content: Text("You clicked on the list " + index.toString()))),
               onTap: (){
                  Navigator.push(context, 
-                 MaterialPageRoute(builder: (context) => ListPage(index)),);
+                 MaterialPageRoute(builder: (context) => ListPage(index, persons)),);
               },
             );
           },
@@ -83,7 +85,8 @@ class MessageItem implements ListItem {
 class ListPage extends StatelessWidget{
 
   final int indexCaller;
-  ListPage(this.indexCaller);
+  final List<ListItem> persons;
+  ListPage(this.indexCaller, this.persons);
   @override
   Widget build(BuildContext context) {
 
@@ -92,7 +95,97 @@ class ListPage extends StatelessWidget{
         title: Text("Inside the list "+indexCaller.toString()),
         
       ),
+      body: ListView.builder(
+        itemCount: persons.length,
+        itemBuilder: (context, index) {
+            final item = persons[index];
+
+            return ListTile(
+              title: item.buildTitle(context),
+             onTap: (){
+                 Navigator.push(context, 
+                 MaterialPageRoute(builder: (context) => PersonCard(persons.elementAt(index).toString())));
+              },
+            );
+          },
+      ),
     );
   }
   
+}
+
+class PersonCard extends StatelessWidget{
+
+  final String personName; 
+  PersonCard(this.personName); 
+  
+  @override
+  Widget build(BuildContext context) {
+     return Scaffold(
+      appBar: AppBar(
+        title: Text(personName + " Card"),
+        
+      ),
+      body: Center(child: buildInfoCard(context)
+      ),
+    );
+  }
+  
+  Widget buildInfoCard(BuildContext context) => Column (
+    mainAxisAlignment: MainAxisAlignment.start, 
+    children: <Widget>[
+      Align(alignment: Alignment.bottomRight,
+      child: IconButton(icon: Icon(Icons.info_outline),
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PersonDetails()));
+        }),),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset('images/hell_dice.png'),
+        ),
+      //Text("Name of the person"),
+      Padding(
+        padding: EdgeInsets.all(30),
+        child: Text('Name of the person'),
+      ),
+    ],
+  );
+}
+
+//Class for the page with all the information regarding a person
+class PersonDetails extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+   return Scaffold(
+      appBar: AppBar(
+        title: Text("Firstname Lastname"),
+      ),
+      body: Center(child:  buildAllInformation(),),
+    );
+  }
+
+  //Widget that will build all the fields
+  Widget buildAllInformation() => Column(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: <Widget>[
+      ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset('images/hell_dice.png'),
+      ),
+      Text('Email'),
+      Text('Phone number'),
+      Container(width: 300, child: 
+        TextField(
+          keyboardType: TextInputType.multiline, 
+          maxLines: null, 
+          decoration: new InputDecoration(
+            border: new OutlineInputBorder(
+              borderSide: new BorderSide(color: Colors.grey)
+            ),
+            hintText: 'Add notes regarding the person',
+            labelText: 'Notes'
+          ),)
+      )
+    ],
+  );
 }
