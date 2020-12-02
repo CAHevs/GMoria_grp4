@@ -81,7 +81,7 @@ class MainPageItem implements ListItem {
 
   Widget buildTitle(BuildContext context) {
     return 
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         Container(
           child: Row(
@@ -117,10 +117,12 @@ class MainPageItem implements ListItem {
                 IconButton(icon: Icon(Icons.play_circle_outline), 
                     disabledColor: Colors.red,
                     iconSize: 45,
-                    onPressed: () => Scaffold
-                .of(context)
-                .showSnackBar(SnackBar(content: Text("testtedstds"))))
-              ],)
+                    onPressed: 
+                    (){
+                  Navigator.push(context, 
+                  MaterialPageRoute(builder: (context) => SelectionModPage()),);
+                }
+              )],)
           ],)
 
         )
@@ -209,6 +211,98 @@ class PersonCard extends StatelessWidget{
     ],
   );
 }
+
+
+
+class SelectionModPage extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Select game mode"),
+      ),
+      body: Center(
+        child: SelectionModeRows().build(context),
+        ),
+    );
+  }
+
+
+
+}
+
+class SelectionModeRows extends StatelessWidget {
+
+
+Widget build(BuildContext context) {
+  return
+    Container(
+      child: 
+      Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          TrainingModeButton().buildTitle(context),
+           TrainingModeButton().buildTitle(context),
+      ],)
+    );
+    
+}
+
+}
+
+//Training mode button
+class TrainingModeButton implements ModeButton {
+
+Widget buildTitle(BuildContext context) {
+    return 
+      Container(
+          height: 100.0,
+          width: 270.0,
+          decoration: BoxDecoration(boxShadow: [
+            BoxShadow(
+              offset: Offset(0.0, 20.0),
+              blurRadius: 30.0,
+              color: Colors.black12)
+          ], color: Colors.white, borderRadius:  BorderRadius.circular(50.0)),
+          child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                height: 100.0,
+                width: 220.0,
+                padding: 
+                  EdgeInsets.symmetric(vertical: 35.0, horizontal: 20.0),
+                child: Text('Training mode', style: TextStyle(
+                    fontSize: 17.0,
+                    color: Colors.black87
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.greenAccent,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(95.0),
+                    topLeft: Radius.circular(95.0),
+                    bottomRight: Radius.circular(200.0)
+                  )
+                ),
+              ),
+              Icon(Icons.home, 
+              size: 40.0,
+              )
+            ],),
+        );
+
+    
+  }
+
+}
+
+
+abstract class ModeButton {
+
+  Widget buildTitle(BuildContext context);
+}
+
+
+
 
 //Class for the page with all the information regarding a person
 class PersonDetails extends StatelessWidget{
