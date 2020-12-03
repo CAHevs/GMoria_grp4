@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//display something when the page is loading
 class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
