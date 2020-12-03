@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gmoria_grp4/Setup/signup.dart';
+import 'package:gmoria_grp4/lists.dart';
 import 'package:gmoria_grp4/test.dart';
 
 class LoginPage extends StatefulWidget {
@@ -71,9 +72,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => TestPage(
-                    user:
-                        userCredential))); //regarder avec Chris comment avec le split des pages
+                builder: (context) => Lists(user: userCredential)));
       } catch (e) {
         print(e.message);
       }
