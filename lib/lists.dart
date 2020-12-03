@@ -53,31 +53,34 @@ class MainPageItem implements ListItem {
   MainPageItem(this.heading);
 
   Widget buildTitle(BuildContext context) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Container(
-              child: Row(
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Container(
+          child: Row(
             children: [
               Text(
                 heading,
                 style: Theme.of(context).textTheme.headline5,
-              )
-            ],
-          )),
-          Container(
-              child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    scoreHeading,
-                    style: TextStyle(fontSize: 25.0, color: Colors.black87),
+                )
+                
+            ],)
+        ),
+        Container(
+          child: Row(children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  scoreHeading,
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    color: Colors.black87
                   ),
-                  Text(
-                    score,
-                    style: TextStyle(fontSize: 20.0, color: Colors.black54),
+                ),
+                Text(
+                  score,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.black54
                   ),
                 ),
               ],),
