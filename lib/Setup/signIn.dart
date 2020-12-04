@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gmoria_grp4/Setup/signup.dart';
 import 'package:gmoria_grp4/lists.dart';
+import 'dart:developer';
 
 //The class for the login
 class LoginPage extends StatefulWidget {
@@ -16,6 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   //display a form with an email and a password field and the methods for check the form
   Widget build(BuildContext context) {
+    log('User: ${FirebaseAuth.instance.currentUser}');
     return Scaffold(
       appBar: AppBar(
         title: Text('Sign in'),
@@ -73,10 +75,12 @@ class _LoginPageState extends State<LoginPage> {
       try {
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: _email, password: _password);
-        User user = FirebaseAuth.instance.currentUser;
         //Navigate to the list page
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => Lists(user: user)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    Lists(user: FirebaseAuth.instance.currentUser)));
       } catch (e) {
         print(e.message);
       }
