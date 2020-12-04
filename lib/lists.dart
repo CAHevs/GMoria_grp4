@@ -48,7 +48,8 @@ abstract class ListItem {
   Widget buildTitle(BuildContext context);
 }
 
-//The rows on the lists for display the name, score and play button for go in the selection mode page
+//Class to create the list with a name, a score and a play button that will redirect
+//to the selection game mode page
 class MainPageItem implements ListItem {
   final String heading;
   final String score = '10/20';
