@@ -4,6 +4,7 @@ import 'package:gmoria_grp4/selection_mode.dart';
 import 'list_person.dart';
 import 'dart:developer';
 
+//Class that will display all the list on the main page
 class Lists extends StatelessWidget {
   final UserCredential user;
   const Lists({this.user});
@@ -45,6 +46,8 @@ abstract class ListItem {
   Widget buildTitle(BuildContext context);
 }
 
+//Class to create the list with a name, a score and a play button that will redirect
+//to the selection game mode page
 class MainPageItem implements ListItem {
   final String heading;
   final String score = '10/20';

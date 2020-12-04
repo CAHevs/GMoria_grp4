@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'person_card.dart';
 
+//Class containing the list with all person inside a selected list and display them
 class ListPerson extends StatelessWidget{
 
   final int indexCaller;
@@ -39,7 +40,7 @@ abstract class ListItem {
   Widget buildTitle(BuildContext context);
 }
 
-/// A ListItem that contains data to display a heading.
+/// A ListItem that contains a picture and the name of the person
 class PersonList implements ListItem {
   final String heading;
 
@@ -53,7 +54,7 @@ class PersonList implements ListItem {
         Expanded(child: CircleAvatar(
           radius: 55,
           backgroundColor: Colors.white,
-          child: CircleAvatar(radius: 50, backgroundImage: AssetImage('images/hell_dice.png'), )
+          child: CircleAvatar(radius: 50, backgroundImage: AssetImage('images/profil.png'), )
         ),),
         Text(heading, style: Theme.of(context).textTheme.headline5,),
       ]
