@@ -89,7 +89,7 @@ class _SignUpPageState extends State<SignupPage> {
             //go to the List page
             MaterialPageRoute(
                 builder: (context) =>
-                    Lists(user: FirebaseAuth.instance.currentUser)));
+                    ListsPage()));
       } catch (e) {
         print(e.message);
       }
