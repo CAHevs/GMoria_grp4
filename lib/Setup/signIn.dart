@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    Lists(user: FirebaseAuth.instance.currentUser)));
+                    ListsPage()));
       } catch (e) {
         print(e.message);
       }
