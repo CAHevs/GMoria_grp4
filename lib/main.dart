@@ -51,9 +51,7 @@ class MyApp extends StatelessWidget {
                 ),
                 //Return the login page
                 home: Scaffold(
-                  body: Lists(
-                      user: FirebaseAuth.instance
-                          .currentUser), //go to the list page and give the user loged in
+                  body: ListsPage(), //go to the list page and give the user loged in
                 ));
           }
         }
