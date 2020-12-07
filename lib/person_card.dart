@@ -30,7 +30,7 @@ class PersonCard extends StatelessWidget{
         }),),
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.asset('images/profil.png'),
+          child: Image.asset('images/profil.png', height: 300, width: 300,),
         ),
       Padding(
         padding: EdgeInsets.all(30),
