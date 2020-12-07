@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Lists(user: userCredential)));
+                builder: (context) => ListsPage()));
       } catch (e) {
         print(e.message);
       }

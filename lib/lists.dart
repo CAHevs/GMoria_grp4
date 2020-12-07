@@ -1,29 +1,75 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/selection_mode.dart';
 import 'list_person.dart';
 import 'dart:developer';
+import 'Objects/listsObject.dart';
 
-class Lists extends StatelessWidget {
-  final UserCredential user;
-  const Lists({this.user});
+class ListsPage extends StatefulWidget {
+  @override
+  _Lists createState() => _Lists();
+}
+
+class _Lists extends State<ListsPage> {
+  var firestoreInstance = FirebaseFirestore.instance;
+  var firestoreUser = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
+/*
     List<ListItem> items =
         List<ListItem>.generate(5, (index) => MainPageItem("List $index"));
+*/
 
-    log('User: ${user.user.uid}');
+
     return Scaffold(
         appBar: AppBar(
           title: Text("GMoria"),
         ),
-        body: ListView.builder(
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection(firestoreUser.email)
+              .snapshots(),
+          builder: (context, snapshot) {
+            var doc = snapshot.data.docs;
+            if (!snapshot.hasData) return Text('Loading data.. Please Wait..');
+
+            return new ListView.builder(
+                itemCount: doc.length,
+                itemBuilder: (context, index) {
+                  final item = doc[index];
+
+                  /*
+                  return Container(
+                    child: MainPageItem(item.name),
+                  );*/
+/*
+                  return ListTile(
+
+                    title: item.buildTitle(context),
+                    onLongPress: () => Scaffold.of(context).showSnackBar(SnackBar(
+                    content:
+                        Text("You clicked on the list " + index.toString()))),
+                    onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ListPerson(index)),
+                  );
+                },
+              );*/
+                });
+          },
+        )
+
+        /*
+          body: ListView.builder(
             itemCount: items.length,
             itemBuilder: (context, index) {
               final item = items[index];
 
               return ListTile(
+
                 title: item.buildTitle(context),
                 onLongPress: () => Scaffold.of(context).showSnackBar(SnackBar(
                     content:
@@ -35,7 +81,25 @@ class Lists extends StatelessWidget {
                   );
                 },
               );
-            }));
+            }
+          )*/
+        );
+  }
+
+  //Method for get all the lists for the auth user
+  Future<List<ListObject>> getAllLists() async {
+    List<ListObject> lists;
+
+    Query query = firestoreInstance.collection(firestoreUser.email);
+    lists.clear();
+    await query.get().then((querySnapshot) async {
+      querySnapshot.docs.forEach((document) {
+          lists.add(new ListObject(
+              document.id, document.data()['name'], document.data().values));
+      });
+    });
+    return lists;
+
   }
 }
 
@@ -53,50 +117,53 @@ class MainPageItem implements ListItem {
   MainPageItem(this.heading);
 
   Widget buildTitle(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Container(
-          child: Row(
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Container(
+              child: Row(
             children: [
               Text(
                 heading,
                 style: Theme.of(context).textTheme.headline5,
-                )
-                
-            ],)
-        ),
-        Container(
-          child: Row(children: [
-              Column(crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  scoreHeading,
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    color: Colors.black87
+              )
+            ],
+          )),
+          Container(
+              child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    scoreHeading,
+                    style: TextStyle(fontSize: 25.0, color: Colors.black87),
                   ),
-                ),
-                Text(
-                  score,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black54
+                  Text(
+                    score,
+                    style: TextStyle(fontSize: 20.0, color: Colors.black54),
                   ),
-                ),
-              ],),
-              Column(crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IconButton(icon: Icon(Icons.play_circle_outline), 
-                    disabledColor: Colors.red,
-                    iconSize: 45,
-                    onPressed: (){
-                  Navigator.push(context, 
-                  MaterialPageRoute(builder: (context) => SelectionModPage()),);
-                })
-              ],)
-          ],)
-        )
-      ]);    
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.play_circle_outline),
+                      disabledColor: Colors.red,
+                      iconSize: 45,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SelectionModPage()),
+                        );
+                      })
+                ],
+              )
+            ],
+          ))
+        ]);
   }
 }
 
