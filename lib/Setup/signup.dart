@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gmoria_grp4/test.dart';
+import 'package:gmoria_grp4/lists.dart';
 
+//the class for sign up in our app
 class SignupPage extends StatefulWidget {
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
 
+//the state of the signup form
 class _SignUpPageState extends State<SignupPage> {
   String _email, _password, _tempPassword;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -74,18 +76,20 @@ class _SignUpPageState extends State<SignupPage> {
     if (formState.validate()) {
       formState.save();
 
+      //create the user in our db and log him in
       try {
         await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: _email, password: _password);
-        UserCredential userCredential = await FirebaseAuth.instance
+        //TO DO in the sprint 2 : Create a collection for the user
+        await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: _email, password: _password);
         //Navigate to home
         Navigator.push(
             context,
+            //go to the List page
             MaterialPageRoute(
-                builder: (context) => TestPage(
-                    user:
-                        userCredential))); //regarder avec Chris comment avec le split des pages
+                builder: (context) =>
+                    Lists(user: FirebaseAuth.instance.currentUser)));
       } catch (e) {
         print(e.message);
       }

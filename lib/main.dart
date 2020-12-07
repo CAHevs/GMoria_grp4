@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Setup/loading.dart';
 import 'package:gmoria_grp4/Setup/signIn.dart';
 import 'package:gmoria_grp4/Setup/somethingWentWrong.dart';
+import 'package:gmoria_grp4/lists.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,15 +31,31 @@ class MyApp extends StatelessWidget {
 
         //Once complete, show the app
         if (snapshot.connectionState == ConnectionState.done) {
-          return MaterialApp(
-              title: title,
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-              ),
-              //Return the login page
-              home: Scaffold(
-                body: LoginPage(),
-              ));
+          //if no user in the cache, return the login page
+          if (FirebaseAuth.instance.currentUser == null) {
+            return MaterialApp(
+                title: title,
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                ),
+                //Return the login page
+                home: Scaffold(
+                  body: LoginPage(), //go to the login page
+                ));
+          } else {
+            //if this is a user in the cache, go to the list page(a user is logged)
+            return MaterialApp(
+                title: title,
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                ),
+                //Return the login page
+                home: Scaffold(
+                  body: Lists(
+                      user: FirebaseAuth.instance
+                          .currentUser), //go to the list page and give the user loged in
+                ));
+          }
         }
 
         //Otherwise, show the loading page

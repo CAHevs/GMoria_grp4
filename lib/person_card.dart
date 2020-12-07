@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'person_details.dart';
 
+//Class that will display the "person's card"
 class PersonCard extends StatelessWidget{
 
   final String personName; 
@@ -18,6 +19,7 @@ class PersonCard extends StatelessWidget{
     );
   }
   
+  //This widget will display in columns : the "more info" button, the picture of the person and his name
   Widget buildInfoCard(BuildContext context) => Column (
     mainAxisAlignment: MainAxisAlignment.start, 
     children: <Widget>[
@@ -28,7 +30,7 @@ class PersonCard extends StatelessWidget{
         }),),
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.asset('images/hell_dice.png'),
+          child: Image.asset('images/profil.png'),
         ),
       Padding(
         padding: EdgeInsets.all(30),

@@ -18,7 +18,7 @@ class PersonDetails extends StatelessWidget{
     children: <Widget>[
       ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.asset('images/hell_dice.png'),
+          child: Image.asset('images/profil.png'),
       ),
       Text('Email'),
       Text('Phone number'),

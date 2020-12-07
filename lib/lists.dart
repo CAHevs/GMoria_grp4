@@ -71,9 +71,11 @@ class _Lists extends State<ListsPage> {
               return ListTile(
 
                 title: item.buildTitle(context),
+                //method to test that the long press work(for the edit function)
                 onLongPress: () => Scaffold.of(context).showSnackBar(SnackBar(
                     content:
                         Text("You clicked on the list " + index.toString()))),
+                //go in the list to see it content
                 onTap: () {
                   Navigator.push(
                     context,
@@ -109,6 +111,8 @@ abstract class ListItem {
   Widget buildTitle(BuildContext context);
 }
 
+//Class to create the list with a name, a score and a play button that will redirect
+//to the selection game mode page
 class MainPageItem implements ListItem {
   final String heading;
   final String score = '10/20';
@@ -152,6 +156,7 @@ class MainPageItem implements ListItem {
                       icon: Icon(Icons.play_circle_outline),
                       disabledColor: Colors.red,
                       iconSize: 45,
+                      //go to the selection mode page
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -167,7 +172,7 @@ class MainPageItem implements ListItem {
   }
 }
 
-/// A ListItem that contains data to display a heading.
+/// A ListItem that contains data to display a heading
 class HeadingItem implements ListItem {
   final String heading;
 
