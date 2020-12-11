@@ -3,8 +3,7 @@ class ListObject {
   String id;
   List<String> users;
 
-  ListObject(this.id, this.name, this.users);
-
+  ListObject(this.id, this.name);
 
   String getName() {
     return name;

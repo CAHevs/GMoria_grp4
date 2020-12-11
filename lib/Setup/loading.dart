@@ -12,7 +12,7 @@ class Loading extends StatelessWidget {
         appBar: AppBar(
           title: Text("Loading"),
         ),
-        body: Text("Loadin, please wait"),
+        body: Text("Loading, please wait"),
       ),
     );
   }
