@@ -51,7 +51,8 @@ class MyApp extends StatelessWidget {
                 ),
                 //Return the login page
                 home: Scaffold(
-                  body: ListsPage(), //go to the list page and give the user loged in
+                  body:
+                      ListsPage(), //go to the list page and give the user loged in
                 ));
           }
         }
