@@ -37,7 +37,11 @@ class _Lists extends State<ListsPage> {
                   }),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  print("add a list");
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddList()),
+                );
                 },
                 child: Icon(Icons.add),
               ),

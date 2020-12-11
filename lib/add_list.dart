@@ -1,9 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gmoria_grp4/lists.dart';
 
 class AddList extends StatelessWidget {
 
+  var newListName;
+  var userLoggedIn = FirebaseAuth.instance.currentUser;
+  CollectionReference userEmail;
+  CollectionReference userCollectionInsideList;
   @override
   Widget build(BuildContext context) {
+     userEmail = FirebaseFirestore.instance.collection(userLoggedIn.email);
      return Scaffold(
       appBar: AppBar(
         title: Text("Add a new list"),
@@ -13,7 +21,15 @@ class AddList extends StatelessWidget {
       ),
        floatingActionButton: FloatingActionButton(
             onPressed: () {
-              
+              if(newListName == null || newListName.isEmpty){
+
+                print("The name can not be empty !");
+              }
+              addNewList();
+              //Clear the TextField or Go back 
+              Navigator.push(
+                context, MaterialPageRoute(
+                  builder: (context) => ListsPage()));
             }, 
             child: Icon(Icons.save),
           ),
@@ -25,6 +41,7 @@ class AddList extends StatelessWidget {
     children: [
        Container(width: 300, child: 
         TextField(
+          onChanged: (value){newListName = value;},
           keyboardType: TextInputType.multiline, 
           maxLines: null, 
           decoration: new InputDecoration(
@@ -37,4 +54,11 @@ class AddList extends StatelessWidget {
       )
     ],
   );
+
+  Future<void> addNewList(){
+    return userEmail.add({
+      'name': newListName,
+    }).then((value) => print("List added"))
+    .catchError((error) => print("Failed to add list: $error"));
+  }
 }
