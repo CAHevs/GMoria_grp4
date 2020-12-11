@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gmoria_grp4/add_list.dart';
 import 'package:gmoria_grp4/selection_mode.dart';
 import 'list_person.dart';
 import 'dart:developer';
@@ -17,16 +18,15 @@ class _Lists extends State<ListsPage> {
 
   @override
   Widget build(BuildContext context) {
-/*
     List<ListItem> items =
         List<ListItem>.generate(5, (index) => MainPageItem("List $index"));
-*/
+
 
 
     return Scaffold(
         appBar: AppBar(
           title: Text("GMoria"),
-        ),
+        ),/*
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection(firestoreUser.email)
@@ -61,8 +61,8 @@ class _Lists extends State<ListsPage> {
                 });
           },
         )
-
-        /*
+        */
+        
           body: ListView.builder(
             itemCount: items.length,
             itemBuilder: (context, index) {
@@ -84,7 +84,16 @@ class _Lists extends State<ListsPage> {
                 },
               );
             }
-          )*/
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context) => AddList()),
+              );
+            }, 
+            child: Icon(Icons.add),
+          ),
         );
   }
 
