@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Setup/loading.dart';
 import 'package:gmoria_grp4/Setup/signIn.dart';
 import 'package:gmoria_grp4/Setup/somethingWentWrong.dart';
+import 'package:gmoria_grp4/lists.dart';
 import 'package:gmoria_grp4/selection_mode.dart';
 
 void main() {
@@ -40,7 +41,8 @@ class MyApp extends StatelessWidget {
                 ),
                 //Return the login page
                 home: Scaffold(
-                  body: LoginPage(), //go to the login page
+                  body: LoginPage(),
+                   //go to the login page
                 ));
           } else {
             //if this is a user in the cache, go to the list page(a user is logged)
@@ -51,8 +53,8 @@ class MyApp extends StatelessWidget {
                 ),
                 //Return the login page
                 home: Scaffold(
-                  //body: ListsPage(),
-                  body: SelectionModPage() //go to the list page and give the user loged in
+                  body: ListsPage(),
+                  //body: SelectionModPage(FirebaseAuth.instance.currentUser.uid), //go to the list page and give the user loged in
                 ));
           }
         }
