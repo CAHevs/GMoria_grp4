@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
+import 'package:gmoria_grp4/person_card.dart';
 
 //Class containing the list with all person inside a selected list and display them
 class ListPerson extends StatelessWidget {
@@ -27,7 +28,7 @@ class ListPerson extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final Users user = snapshot.data[index];
                   print("${user.firstname} ${user.lastname}");
-                  return PersonList(user.firstname, user.image)
+                  return PersonList(user)
                       .buildTitle(context);
                 }),
             floatingActionButton: FloatingActionButton(
@@ -80,7 +81,8 @@ class ListPerson extends StatelessWidget {
                 document.id,
                 document.data()["firstname"], 
                 document.data()["lastname"], 
-                document.data()["image"]
+                document.data()["image"],
+                document.data()["note"]
                 ));
             }
           }
@@ -92,13 +94,14 @@ class ListPerson extends StatelessWidget {
   }
 
     Users getSpecificUser(var userId){
-    var firstname, lastname, image;
+    var firstname, lastname, image, note;
     firestoreInstance.collection(firestoreUser.email).doc("users").collection("users").doc(userId).get().then((DocumentSnapshot documentSnapshot){
       if(documentSnapshot.exists){
         firstname = documentSnapshot.data()["firstname"];
         lastname = documentSnapshot.data()["lastname"];
         image = documentSnapshot.data()["image"];
-        Users user = new Users(userId, firstname, lastname, image);
+        note = documentSnapshot.data()["note"];
+        Users user = new Users(userId, firstname, lastname, image, note);
         print("Inside getSpecificUser " + userId + " " + firstname + " " + lastname);
        return user;
       }else{
@@ -117,12 +120,13 @@ abstract class ListItem {
 
 /// A ListItem that contains a picture and the name of the person
 class PersonList implements ListItem {
-  final String heading;
-  final String image;
+  final Users person;
 
-  PersonList(this.heading, this.image);
-
+  PersonList(this.person);
+ 
   Widget buildTitle(BuildContext context) {
+    var heading = person.firstname + " " + person.lastname;
+
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Expanded(
         child: CircleAvatar(
@@ -130,13 +134,29 @@ class PersonList implements ListItem {
             backgroundColor: Colors.white,
             child: CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(image),
+              backgroundImage: NetworkImage(person.image),
             )),
       ),
-      Text(
-        heading,
-        style: Theme.of(context).textTheme.headline5,
-      ),
+      Container(
+        child: 
+        InkWell(
+              child: Text(
+                heading,
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PersonCard(person)),
+                );
+              },
+              onLongPress: () {
+                print("edit the list " + heading);
+              },
+            )
+      )
+      
     ]);
   }
 }

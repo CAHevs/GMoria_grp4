@@ -43,8 +43,7 @@ class SwipeableCard extends StatelessWidget {
                 icon: Icon(Icons.info_outline),
                 iconSize: 50.0,
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PersonDetails()));
+ 
                 }),
           ),
           ClipRRect(

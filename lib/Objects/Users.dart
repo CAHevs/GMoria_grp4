@@ -3,8 +3,9 @@ class Users {
   String firstname;
   String lastname;
   String image;
+  String note;
 
-  Users(this.id, this.firstname, this.lastname, this.image);
+  Users(this.id, this.firstname, this.lastname, this.image, this.note);
 
   String getId() {
     return id;
@@ -20,6 +21,14 @@ class Users {
 
   String getImage() {
     return image;
+  }
+
+  String getNote(){
+    return note;
+  }
+
+  void setNote(String note){
+    this.note = note;
   }
 
   void setId(String id) {
