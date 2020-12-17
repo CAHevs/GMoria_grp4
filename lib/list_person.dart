@@ -65,31 +65,28 @@ class ListPerson extends StatelessWidget {
 
     Query query = firestoreInstance
         .collection(firestoreUser.email)
-        .doc(id)
+        .doc("users")
         .collection("users");
     await query.get().then((querySnapshot) async {
 
       querySnapshot.docs.forEach((document) {
-        var userId = document.data()['user'];
-        userId = userId.toString();
-        userId = userId.substring(45, userId.length - 1);
+        String array = document.data()["lists"].toString();
 
-        var firstname, lastname, image;
-        firestoreInstance.collection(firestoreUser.email).doc("users").collection("users").doc(userId).get().then((DocumentSnapshot documentSnapshot){
-          if(documentSnapshot.exists){
-            firstname = documentSnapshot.data()["firstname"];
-            lastname = documentSnapshot.data()["lastname"];
-            image = documentSnapshot.data()["image"];
-            if(image == null){
-              image = "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png";
+        for(var i = 1; i < array.length; i++){
+          
+          if(array[i]==',' || array[i]==']'){
+            if(id==array.substring(i-20, i)){
+              lists.add(new Users(
+                document.id,
+                document.data()["firstname"], 
+                document.data()["lastname"], 
+                document.data()["image"]
+                ));
             }
-            Users user = new Users(userId, firstname, lastname, image);
-            lists.add(user);
-          }else{
-            print("doc not exists");
           }
-        });
-      });
+          
+        }
+       });
     });
     return lists;
   }
