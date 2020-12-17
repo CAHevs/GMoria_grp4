@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gmoria_grp4/Setup/loading.dart';
 import 'package:gmoria_grp4/add_list.dart';
 import 'package:gmoria_grp4/Objects/listsObject.dart';
 import 'package:gmoria_grp4/list_person.dart';
@@ -22,6 +23,9 @@ class _Lists extends State<ListsPage> {
         builder:
             (BuildContext context, AsyncSnapshot<List<ListObject>> snapshot) {
           Widget body;
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Loading();
+          }
           if (snapshot.hasData) {
             return Scaffold(
               appBar: AppBar(
@@ -59,7 +63,9 @@ class _Lists extends State<ListsPage> {
     Query query = firestoreInstance.collection(firestoreUser.email);
     await query.get().then((querySnapshot) async {
       querySnapshot.docs.forEach((document) {
-        lists.add(new ListObject(document.id, document.data().values.first));
+        if(document.id.length > 6){
+          lists.add(new ListObject(document.id, document.data().values.first));
+        }
       });
     });
     print(lists.length);
