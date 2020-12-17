@@ -43,8 +43,9 @@ class ListPerson extends StatelessWidget {
   }
 
 //Method for get all the lists for the auth user
-  Future<List<Users>> getAllUsersFromAList() async {
-    List<Users> lists = new List<Users>();
+ Future<List<Users>> getAllUsersFromAList() async {
+    List<Users> list = new List<Users>();
+    var firstname, lastname, image;
 
     Query query = firestoreInstance
         .collection(firestoreUser.email)
@@ -52,14 +53,28 @@ class ListPerson extends StatelessWidget {
         .collection("users");
     await query.get().then((querySnapshot) async {
       querySnapshot.docs.forEach((document) {
-        print("coucou");
-        var test = document.data()['user'];
-        test = test.toString();
-        test = test.substring(24, test.length - 1);
-        print(test);
+        var id = document.data()['user'];
+        id = id.toString();
+        id = id.substring(24, id.length - 1);
+
+        firestoreInstance
+            .collection("users")
+            .doc(id)
+            .get()
+            .then((DocumentSnapshot documentSnapshot) {
+          if (documentSnapshot.exists) {
+            firstname = documentSnapshot.data()["firstname"];
+            lastname = documentSnapshot.data()["lastname"];
+            image = documentSnapshot.data()["image"];
+            Users user = new Users(id, firstname, lastname, image);
+            list.add(user);
+          } else {
+            print("doc not exist");
+          }
+        });
       });
     });
-    return lists;
+    return list;
   }
 }
 

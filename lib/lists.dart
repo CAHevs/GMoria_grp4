@@ -134,7 +134,7 @@ class MainPageItem implements ListItem {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SelectionModPage()),
+                              builder: (context) => SelectionModPage(id)),
                         );
                       })
                 ],

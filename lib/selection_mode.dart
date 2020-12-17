@@ -6,6 +6,11 @@ import 'Game_Modes/mistakes_gamemode.dart';
 
 //Page with the game and train buttons
 class SelectionModPage extends StatelessWidget {
+
+  final String id;
+
+  SelectionModPage(this.id);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,13 +18,17 @@ class SelectionModPage extends StatelessWidget {
         title: Text("Select game mode"),
       ),
       body: Center(
-        child: SelectionModeRows().build(context),
+        child: SelectionModeRows(id).build(context),
       ),
     );
   }
 }
 
 class SelectionModeRows extends StatelessWidget {
+
+  final String id;
+  SelectionModeRows(this.id);
+
   Widget build(BuildContext context) {
     return Container(
         child: Column(
@@ -27,7 +36,7 @@ class SelectionModeRows extends StatelessWidget {
       children: <Widget>[
         TrainingModeButton().buildTitle(context),
         FullListGameModeButton().buildTitle(context),
-        MistakesModeButton().buildTitle(context),
+        MistakesModeButton(id).buildTitle(context),
         //NumberModeButton().buildTitle(context)
       ],
     ));
@@ -72,6 +81,12 @@ class NumberModeButton implements ModeButton {
 }
 
 class MistakesModeButton implements ModeButton {
+
+  final String id;
+
+
+  MistakesModeButton(this.id);
+
   Widget buildTitle(BuildContext context) {
     return new RaisedButton(
         padding: EdgeInsets.all(0),
@@ -96,7 +111,7 @@ class MistakesModeButton implements ModeButton {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => mistakesGameMode()),
+            MaterialPageRoute(builder: (context) => mistakesGameMode(id)),
           );
         });
   }
