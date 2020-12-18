@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gmoria_grp4/lists.dart';
 
+//Class based on add_list.dart to add a person to the list
 class AddPersonToList extends StatelessWidget {
 
   var newListName;

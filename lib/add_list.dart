@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gmoria_grp4/lists.dart';
 
+//Class to add list
 class AddList extends StatelessWidget {
 
   var newListName;
@@ -21,6 +22,7 @@ class AddList extends StatelessWidget {
       ),
        floatingActionButton: FloatingActionButton(
             onPressed: () {
+              //Check if the textfield is null or empty to avoid inserting a false
               if(newListName == null || newListName.isEmpty){
                 //showSnackBarHandler(context);
                 print("Name can not be empty");
@@ -28,7 +30,6 @@ class AddList extends StatelessWidget {
               else{
                 addNewList(); 
 
-              //Clear the TextField or Go back 
               Navigator.push(
                 context, MaterialPageRoute(
                   builder: (context) => ListsPage()));
@@ -39,6 +40,7 @@ class AddList extends StatelessWidget {
     );
   }
 
+  //Build the textfield for the insert
   Widget buildAddNewList(BuildContext context) => Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -58,6 +60,7 @@ class AddList extends StatelessWidget {
     ],
   );
 
+  //Method that will add the list to the DB
   Future<void> addNewList(){
     return userEmail.add({
       'name': newListName,
