@@ -29,6 +29,7 @@ class _Lists extends State<ListsPage> {
           if (snapshot.hasData) {
             return Scaffold(
               appBar: AppBar(
+                automaticallyImplyLeading: false,
                 title: Text("GMoria"),
               ),
               body: ListView.builder(

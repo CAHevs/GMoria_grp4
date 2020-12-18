@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gmoria_grp4/full_list_game_mode.dart';
-import 'package:gmoria_grp4/training_mode.dart';
-
+import 'package:gmoria_grp4/Game_Modes/training_mode.dart';
+import 'Game_Modes/custom_number_gamemode.dart';
 import 'Game_Modes/mistakes_gamemode.dart';
+import 'Game_Modes/normal_gamemode.dart';
+import 'package:gmoria_grp4/lists.dart';
 
 //Page with the game and train buttons
 class SelectionModPage extends StatelessWidget {
@@ -16,6 +17,11 @@ class SelectionModPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Select game mode"),
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back), 
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> new ListsPage()));
+          }),
       ),
       body: Center(
         child: SelectionModeRows(id).build(context),
@@ -34,10 +40,10 @@ class SelectionModeRows extends StatelessWidget {
         child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        TrainingModeButton().buildTitle(context),
-        FullListGameModeButton().buildTitle(context),
+        TrainingModeButton(id).buildTitle(context),
+        FullListGameModeButton(id).buildTitle(context),
         MistakesModeButton(id).buildTitle(context),
-        //NumberModeButton().buildTitle(context)
+        NumberModeButton(id, context).buildTitle(context)
       ],
     ));
   }
@@ -49,14 +55,37 @@ abstract class ModeButton {
 }
 
 class NumberModeButton implements ModeButton {
+
+  BuildContext context;
+  final String id;
+  var number;
+  final num = TextEditingController();
+  NumberModeButton(this.id, this.context);
+
+
   @override
   Widget buildTitle(BuildContext context) {
-    new RaisedButton(
+    return new Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Container(
+              width: 100,
+              padding: EdgeInsets.all(10.0),
+              child: TextField(
+                  controller: num,
+                  onChanged: (value) {
+                    number = value;
+                    },
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(hintText: 'Enter Your Number Here'),
+                )
+              ),
+        RaisedButton(
         padding: EdgeInsets.all(0),
         child: Container(
           decoration: const BoxDecoration(color: Colors.blue),
           height: 100.0,
-          width: 270.0,
+          width: 210.0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -72,13 +101,51 @@ class NumberModeButton implements ModeButton {
           ),
         ),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TrainingList()),
+          if(number == 0 || number == null){
+            _emptyTextfield();
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CustomNumberGameMode(id, number)),
           );
-        });
+          }
+
+          
+        })
+      ],
+    );
+    
   }
+
+    Future<void> _emptyTextfield() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Empty field !'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[Text('The name cannot be empty !')],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Ok !'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  
+
 }
+
+
 
 class MistakesModeButton implements ModeButton {
 
@@ -111,7 +178,7 @@ class MistakesModeButton implements ModeButton {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => mistakesGameMode(id)),
+            MaterialPageRoute(builder: (context) => MistakesGameMode(id)),
           );
         });
   }
@@ -119,6 +186,12 @@ class MistakesModeButton implements ModeButton {
 
 //Training mode button
 class TrainingModeButton implements ModeButton {
+
+
+  final String id;
+
+  TrainingModeButton(this.id);
+
   Widget buildTitle(BuildContext context) {
     return new RaisedButton(
         padding: EdgeInsets.all(0),
@@ -143,7 +216,7 @@ class TrainingModeButton implements ModeButton {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => TrainingList()),
+            MaterialPageRoute(builder: (context) => TrainingList(id)),
           );
         });
   }
@@ -151,6 +224,13 @@ class TrainingModeButton implements ModeButton {
 
 //Training mode button
 class FullListGameModeButton implements ModeButton {
+
+
+  final String id;
+
+
+  FullListGameModeButton(this.id);
+
   Widget buildTitle(BuildContext context) {
     return new RaisedButton(
         padding: EdgeInsets.all(0),
@@ -175,7 +255,7 @@ class FullListGameModeButton implements ModeButton {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PlayList()),
+            MaterialPageRoute(builder: (context) => NormalGameMode(id)),
           );
         });
   }
