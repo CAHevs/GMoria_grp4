@@ -26,7 +26,6 @@ Future<List<Users>> getAllUsersFromAList(id, number) async {
   List<Users> customList = new List<Users>();
   //We recupe the number of people entered by the user
   var numericNumber = int.parse(number);
-  var firstname, lastname, image;
 
   Query query = FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser.email)
@@ -39,8 +38,11 @@ Future<List<Users>> getAllUsersFromAList(id, number) async {
       for (var i = 1; i < array.length; i++) {
         if (array[i] == ',' || array[i] == ']') {
           if (id == array.substring(i - 20, i)) {
-            list.add(new Users(document.id, document.data()["firstname"],
-                document.data()["lastname"], document.data()["image"],
+            list.add(new Users(
+                document.id, 
+                document.data()["firstname"],
+                document.data()["lastname"], 
+                document.data()["image"],
                 document.data()["note"]));
           }
         }
@@ -49,7 +51,7 @@ Future<List<Users>> getAllUsersFromAList(id, number) async {
   });
 
   //We shuffle the list for not have the same order permanently
-  list = shuffle(customList);
+  list = shuffle(list);
 
   //If the number entered by the user is less than the people max, we automatically set it to the max value
   if (numericNumber > list.length) {
@@ -125,7 +127,7 @@ class CustomNumberGamemodeState extends State<CustomNumberGameMode> {
           return Scaffold(
               appBar: AppBar(
                 automaticallyImplyLeading: false,
-                title: Text('Full list gamemode'),
+                title: Text('Custom list gamemode'),
                 actions: <Widget>[
                   //Button for leave the game
                   Padding(
@@ -293,7 +295,7 @@ class CustomNumberGamemodeState extends State<CustomNumberGameMode> {
           //If nobody in the list
           return new Scaffold(
             appBar: AppBar(
-              title: Text('test'),
+              title: Text('Custom list gamemode'),
             ),
             body: Text("No one is in this list"),
             floatingActionButton: FloatingActionButton(
