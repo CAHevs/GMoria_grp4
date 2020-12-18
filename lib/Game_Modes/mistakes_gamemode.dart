@@ -173,11 +173,11 @@ String id;
                           new Visibility(
                               visible: _trueAnswerStatus,
                               child: Text('Next question in $_current',
-                                  style: TextStyle(fontSize: 40.0))),
+                                  style: TextStyle(fontSize: 20.0))),
                           new Visibility(
                               visible: _wrongAnswerStatus,
                               child: Text('Next question in $_current',
-                                  style: TextStyle(fontSize: 40.0))),
+                                  style: TextStyle(fontSize: 20.0))),
 
                           new Padding(padding: EdgeInsets.all(5.0)),
 
