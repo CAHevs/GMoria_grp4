@@ -22,14 +22,17 @@ class AddList extends StatelessWidget {
        floatingActionButton: FloatingActionButton(
             onPressed: () {
               if(newListName == null || newListName.isEmpty){
-
-                print("The name can not be empty !");
+                //showSnackBarHandler(context);
+                print("Name can not be empty");
               }
-              addNewList();
+              else{
+                addNewList(); 
+
               //Clear the TextField or Go back 
               Navigator.push(
                 context, MaterialPageRoute(
                   builder: (context) => ListsPage()));
+              }
             }, 
             child: Icon(Icons.save),
           ),
@@ -61,4 +64,10 @@ class AddList extends StatelessWidget {
     }).then((value) => print("List added"))
     .catchError((error) => print("Failed to add list: $error"));
   }
+}
+
+void showSnackBarHandler(BuildContext context){
+  var snackBar = SnackBar(content: Text("The name can not be empty"));
+
+  Scaffold.of(context).showSnackBar(snackBar);
 }
