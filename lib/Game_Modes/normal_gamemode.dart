@@ -37,7 +37,7 @@ Future<List<Users>> getAllUsersFromAList(id) async {
         if (array[i] == ',' || array[i] == ']') {
           if (id == array.substring(i - 20, i)) {
             list.add(new Users(document.id, document.data()["firstname"],
-                document.data()["lastname"], document.data()["image"]));
+                document.data()["lastname"], document.data()["image"], document.data()["note"]));
           }
         }
       }

@@ -84,7 +84,8 @@ Widget build(BuildContext context) {
                 document.id,
                 document.data()["firstname"], 
                 document.data()["lastname"], 
-                document.data()["image"]
+                document.data()["image"],
+                document.data()["note"]
                 ));
             }
           }
@@ -116,7 +117,7 @@ class SwipeableCard extends StatelessWidget {
                 iconSize: 50.0,
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PersonDetails()));
+                      MaterialPageRoute(builder: (context) => PersonDetails(user)));
                 }),
           ),
           ClipRRect(

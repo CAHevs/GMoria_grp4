@@ -42,7 +42,8 @@ Future<List<Users>> getAllUsersWithMistakesFromAList(id) async {
               list.add(new Users(document.id, 
                 document.data()["firstname"],
                 document.data()["lastname"], 
-                document.data()["image"]));
+                document.data()["image"],
+                document.data()["note"]));
             }
             
           }
