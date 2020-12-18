@@ -43,7 +43,7 @@ class SelectionModeRows extends StatelessWidget {
         TrainingModeButton(id).buildTitle(context),
         FullListGameModeButton(id).buildTitle(context),
         MistakesModeButton(id).buildTitle(context),
-        NumberModeButton(id, context).buildTitle(context)
+        NumberModeButton(id).buildTitle(context)
       ],
     ));
   }
@@ -56,11 +56,10 @@ abstract class ModeButton {
 
 class NumberModeButton implements ModeButton {
 
-  BuildContext context;
   final String id;
   var number;
   final num = TextEditingController();
-  NumberModeButton(this.id, this.context);
+  NumberModeButton(this.id);
 
 
   @override
@@ -94,7 +93,7 @@ class NumberModeButton implements ModeButton {
                 padding: EdgeInsets.all(20.0),
                 child: Text(
                   'Custom number mode',
-                  style: TextStyle(fontSize: 17.0, color: Colors.white),
+                  style: TextStyle(fontSize: 13.0, color: Colors.white),
                 ),
               )
             ],
@@ -102,7 +101,7 @@ class NumberModeButton implements ModeButton {
         ),
         onPressed: () {
           if(number == 0 || number == null){
-            _emptyTextfield();
+            //_emptyTextfield();
           } else {
             Navigator.push(
               context,
@@ -116,7 +115,7 @@ class NumberModeButton implements ModeButton {
     );
     
   }
-
+    /*
     Future<void> _emptyTextfield() async {
     return showDialog<void>(
       context: context,
@@ -141,7 +140,7 @@ class NumberModeButton implements ModeButton {
       },
     );
   }
-  
+  */
 
 }
 
