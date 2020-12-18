@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
 import 'package:gmoria_grp4/person_card.dart';
 
+import 'AddPersonToList.dart';
+
 //Class containing the list with all person inside a selected list and display them
 class ListPerson extends StatelessWidget {
   final String id;
@@ -32,11 +34,15 @@ class ListPerson extends StatelessWidget {
                       .buildTitle(context);
                 }),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                print("add a person");
-              },
-              child: Icon(Icons.add),
-            ),
+                onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddPersonToList()),
+                );
+                },
+                child: Icon(Icons.add),
+              ),
           );
         } else {
           return new Scaffold(
@@ -45,11 +51,15 @@ class ListPerson extends StatelessWidget {
             ),
             body: Text("No one is in this list"),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                print("add a list");
-              },
-              child: Icon(Icons.add),
-            ),
+                onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddPersonToList()),
+                );
+                },
+                child: Icon(Icons.add),
+              ),
           );
         }
       },
@@ -61,9 +71,8 @@ class ListPerson extends StatelessWidget {
   }
 
 //Method for get all the lists for the auth user
- Future<List<Users>> getAllUsersFromAList() async {
-    List<Users> list = new List<Users>();
-    var firstname, lastname, image;
+  Future<List<Users>> getAllUsersFromAList() async {
+    List<Users> lists = new List<Users>();
 
     Query query = firestoreInstance
         .collection(firestoreUser.email)
@@ -78,7 +87,7 @@ class ListPerson extends StatelessWidget {
           
           if(array[i]==',' || array[i]==']'){
             if(id==array.substring(i-20, i)){
-              list.add(new Users(
+              lists.add(new Users(
                 document.id,
                 document.data()["firstname"], 
                 document.data()["lastname"], 
@@ -91,7 +100,7 @@ class ListPerson extends StatelessWidget {
         }
        });
     });
-    return list;
+    return lists;
   }
 
     Users getSpecificUser(var userId){
