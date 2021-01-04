@@ -1,3 +1,4 @@
+//A class for the user object with infos
 class Users {
   String id;
   String firstname;

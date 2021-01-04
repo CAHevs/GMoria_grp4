@@ -5,7 +5,6 @@ import 'package:gmoria_grp4/Setup/loading.dart';
 import 'package:gmoria_grp4/Setup/signIn.dart';
 import 'package:gmoria_grp4/Setup/somethingWentWrong.dart';
 import 'package:gmoria_grp4/lists.dart';
-import 'package:gmoria_grp4/selection_mode.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
