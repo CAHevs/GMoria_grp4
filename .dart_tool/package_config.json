@@ -188,6 +188,12 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "flutter_plugin_android_lifecycle",
+      "rootUri": "file:///E:/HES/Semestre%205/Mobile/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-1.0.11",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
       "name": "flutter_swiper",
       "rootUri": "file:///E:/HES/Semestre%205/Mobile/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_swiper-1.1.6",
       "packageUri": "lib/",
@@ -218,6 +224,12 @@
       "languageVersion": "2.3"
     },
     {
+      "name": "http",
+      "rootUri": "file:///E:/HES/Semestre%205/Mobile/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.12.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.4"
+    },
+    {
       "name": "http_parser",
       "rootUri": "file:///E:/HES/Semestre%205/Mobile/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-3.1.4",
       "packageUri": "lib/",
@@ -228,6 +240,18 @@
       "rootUri": "file:///E:/HES/Semestre%205/Mobile/flutter/.pub-cache/hosted/pub.dartlang.org/image-2.1.19",
       "packageUri": "lib/",
       "languageVersion": "2.0"
+    },
+    {
+      "name": "image_picker",
+      "rootUri": "file:///E:/HES/Semestre%205/Mobile/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.6.7+17",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "image_picker_platform_interface",
+      "rootUri": "file:///E:/HES/Semestre%205/Mobile/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_platform_interface-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.5"
     },
     {
       "name": "intl",
@@ -284,8 +308,20 @@
       "languageVersion": "2.10"
     },
     {
+      "name": "path_provider",
+      "rootUri": "file:///E:/HES/Semestre%205/Mobile/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.24",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
       "name": "path_provider_linux",
       "rootUri": "file:///E:/HES/Semestre%205/Mobile/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-0.0.1+2",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "path_provider_macos",
+      "rootUri": "file:///E:/HES/Semestre%205/Mobile/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-0.0.4+6",
       "packageUri": "lib/",
       "languageVersion": "2.1"
     },
@@ -476,7 +512,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2020-12-18T08:52:46.707635Z",
+  "generated": "2021-01-07T10:22:23.991134Z",
   "generator": "pub",
   "generatorVersion": "2.10.3"
 }
