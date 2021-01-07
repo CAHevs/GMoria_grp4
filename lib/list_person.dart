@@ -12,6 +12,8 @@ class ListPerson extends StatelessWidget {
   final String name;
   ListPerson(this.id, this.name);
 
+  List<Users> personNotInTheList = new List<Users>();
+  List<Users> allPersoninDB = new List<Users>();
   var firestoreInstance = FirebaseFirestore.instance;
   var firestoreUser = FirebaseAuth.instance.currentUser;
 
@@ -30,19 +32,19 @@ class ListPerson extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final Users user = snapshot.data[index];
                   print("${user.firstname} ${user.lastname}");
-                  return PersonList(user)
-                      .buildTitle(context);
+                  return PersonList(user).buildTitle(context);
                 }),
             floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
+              onPressed: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AddPersonToList()),
+                      builder: (context) => AddPersonToList(
+                          id, personNotInTheList, allPersoninDB, name)),
                 );
-                },
-                child: Icon(Icons.add),
-              ),
+              },
+              child: Icon(Icons.add),
+            ),
           );
         } else {
           return new Scaffold(
@@ -51,15 +53,16 @@ class ListPerson extends StatelessWidget {
             ),
             body: Text("No one is in this list"),
             floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
+              onPressed: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AddPersonToList()),
+                      builder: (context) => AddPersonToList(
+                          id, personNotInTheList, allPersoninDB, name)),
                 );
-                },
-                child: Icon(Icons.add),
-              ),
+              },
+              child: Icon(Icons.add),
+            ),
           );
         }
       },
@@ -79,42 +82,67 @@ class ListPerson extends StatelessWidget {
         .doc("users")
         .collection("users");
     await query.get().then((querySnapshot) async {
-
       querySnapshot.docs.forEach((document) {
         String array = document.data()["lists"].toString();
 
-        for(var i = 1; i < array.length; i++){
-          
-          if(array[i]==',' || array[i]==']'){
-            if(id==array.substring(i-20, i)){
+        personNotInTheList.add(new Users(
+            document.id,
+            document.data()["firstname"],
+            document.data()["lastname"],
+            document.data()["image"],
+            document.data()["note"]));
+
+        allPersoninDB.add(new Users.withlist(
+            document.id,
+            document.data()["firstname"],
+            document.data()["lastname"],
+            document.data()["image"],
+            document.data()["note"],
+            document.data()["lists"]));
+
+        for (var i = 1; i < array.length; i++) {
+          if (array[i] == ',' || array[i] == ']') {
+            if (id == array.substring(i - 20, i)) {
               lists.add(new Users(
-                document.id,
-                document.data()["firstname"], 
-                document.data()["lastname"], 
-                document.data()["image"],
-                document.data()["note"]
-                ));
+                  document.id,
+                  document.data()["firstname"],
+                  document.data()["lastname"],
+                  document.data()["image"],
+                  document.data()["note"]));
+
+              personNotInTheList
+                  .removeWhere((element) => element.id == document.id);
             }
           }
-          
         }
-       });
+      });
     });
     return lists;
   }
 
-    Users getSpecificUser(var userId){
+  Users getSpecificUser(var userId) {
     var firstname, lastname, image, note;
-    firestoreInstance.collection(firestoreUser.email).doc("users").collection("users").doc(userId).get().then((DocumentSnapshot documentSnapshot){
-      if(documentSnapshot.exists){
+    firestoreInstance
+        .collection(firestoreUser.email)
+        .doc("users")
+        .collection("users")
+        .doc(userId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
         firstname = documentSnapshot.data()["firstname"];
         lastname = documentSnapshot.data()["lastname"];
         image = documentSnapshot.data()["image"];
         note = documentSnapshot.data()["note"];
         Users user = new Users(userId, firstname, lastname, image, note);
-        print("Inside getSpecificUser " + userId + " " + firstname + " " + lastname);
-       return user;
-      }else{
+        print("Inside getSpecificUser " +
+            userId +
+            " " +
+            firstname +
+            " " +
+            lastname);
+        return user;
+      } else {
         print("doc not exists");
       }
     });
@@ -133,7 +161,7 @@ class PersonList implements ListItem {
   final Users person;
 
   PersonList(this.person);
- 
+
   Widget buildTitle(BuildContext context) {
     var heading = person.firstname + " " + person.lastname;
 
@@ -148,25 +176,21 @@ class PersonList implements ListItem {
             )),
       ),
       Container(
-        child: 
-        InkWell(
-              child: Text(
-                heading,
-                style: Theme.of(context).textTheme.headline5,
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PersonCard(person)),
-                );
-              },
-              onLongPress: () {
-                print("edit the list " + heading);
-              },
-            )
-      )
-      
+          child: InkWell(
+        child: Text(
+          heading,
+          style: Theme.of(context).textTheme.headline5,
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PersonCard(person)),
+          );
+        },
+        onLongPress: () {
+          print("edit the list " + heading);
+        },
+      ))
     ]);
   }
 }
