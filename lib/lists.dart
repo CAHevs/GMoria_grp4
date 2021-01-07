@@ -29,8 +29,27 @@ class _Lists extends State<ListsPage> {
           if (snapshot.hasData) {
             return Scaffold(
               appBar: AppBar(
-                automaticallyImplyLeading: false,
                 title: Text("GMoria"),
+              ),
+              //Drawer with the settings and the button to delete account
+              drawer: new Drawer(
+                child: ListView(
+                  children: <Widget>[
+                    new UserAccountsDrawerHeader(
+                      accountName: new Text(''), 
+                      accountEmail: new Text(firestoreUser.email)
+                      ),
+                    new ListTile(
+                      title: new Text('Delete account'),
+                      onTap:() {
+
+                      }
+                    ),
+                    new ListTile(
+                      title: new Text('Settings'),
+                      onTap:() {}
+                    )
+                  ],),
               ),
               body: ListView.builder(
                   itemCount: snapshot.data.length,
