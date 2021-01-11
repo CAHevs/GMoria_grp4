@@ -59,6 +59,13 @@ Future<void> updateMistakeStatus(personId) async {
       .update({'mistake': true});
 }
 
+Future<void> updateScore(list,score) async {
+  return FirebaseFirestore.instance
+      .collection(FirebaseAuth.instance.currentUser.email)
+      .doc(list)
+      .update({'score': score});
+}
+
 //If the user does a mistake, it's set in the DB
 List<Users> shuffle(List<Users> items) {
   var random = new Random();
@@ -220,7 +227,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
                                             setState(() {
                                               _trueAnswerStatus = true;
                                             });
-                                            updateQuestion(snapshot.data);
+                                            updateQuestion(snapshot.data, snapshot.data.length);
                                           } else {
                                             //If correct answer, we set the mistake in DB and change question
                                             //We also show a red circle with the right name for saying that is false
@@ -229,7 +236,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
                                             setState(() {
                                               _wrongAnswerStatus = true;
                                             });
-                                            updateQuestion(snapshot.data);
+                                            updateQuestion(snapshot.data, snapshot.data.length);
                                           }
                                           //We clear the textfield
                                           _controller.clear();
@@ -274,12 +281,6 @@ class NormalGamemodeState extends State<NormalGameMode> {
               title: Text('test'),
             ),
             body: Text("No one is in this list"),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                print("add a list");
-              },
-              child: Icon(Icons.add),
-            ),
           );
         }
       },
@@ -318,7 +319,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
   }
 
 //Method for go to next question
-  void updateQuestion(allUsers) {
+  void updateQuestion(allUsers, total) {
     //Method for refresh the game IF it's ended
     void refresh() {
       setState(() {
@@ -339,7 +340,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
           Navigator.push(
               context,
               new MaterialPageRoute(
-                  builder: (context) => new Summary(finalScore, refresh)));
+                  builder: (context) => new Summary(finalScore, refresh,total)));
         } else {
           //if not the last question, we increase the question number and hide green or red circle
           questionNumber++;
@@ -381,7 +382,11 @@ class NormalGamemodeState extends State<NormalGameMode> {
 class Summary extends StatelessWidget {
   final int score;
   final Function refresh;
-  Summary(this.score, this.refresh);
+  final int total;
+  Summary(this.score, this.refresh, this.total);
+
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -418,7 +423,8 @@ class Summary extends StatelessWidget {
                 new MaterialButton(
                     color: Colors.blue[400],
                     onPressed: () {
-                     //Leave the game
+                     //Leave the game and update the score
+                      updateScore("", (score / total) * 100);
                       Navigator.push(
                           context,
                           new MaterialPageRoute(

@@ -45,12 +45,6 @@ Widget build(BuildContext context) {
               title: Text('Training mode'),
             ),
             body: Text("No one is in this list"),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                print("add a list");
-              },
-              child: Icon(Icons.add),
-            ),
           );
         }
       },

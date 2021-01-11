@@ -6,6 +6,7 @@ import 'package:gmoria_grp4/add_list.dart';
 import 'package:gmoria_grp4/Objects/listsObject.dart';
 import 'package:gmoria_grp4/list_person.dart';
 import 'package:gmoria_grp4/selection_mode.dart';
+import 'package:gmoria_grp4/settings.dart';
 
 class ListsPage extends StatefulWidget {
   @override
@@ -36,25 +37,25 @@ class _Lists extends State<ListsPage> {
                 child: ListView(
                   children: <Widget>[
                     new UserAccountsDrawerHeader(
-                      accountName: new Text(''), 
-                      accountEmail: new Text(firestoreUser.email)
-                      ),
+                        accountName: new Text(''),
+                        accountEmail: new Text(firestoreUser.email,
+                            style: TextStyle(fontSize: 18.0))),
                     new ListTile(
-                      title: new Text('Delete account'),
-                      onTap:() {
-
-                      }
-                    ),
-                    new ListTile(
-                      title: new Text('Settings'),
-                      onTap:() {}
-                    )
-                  ],),
+                        title: new Text('Settings'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SettingsPage()),
+                          );
+                        })
+                  ],
+                ),
               ),
               body: ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
                     final ListObject listObject = snapshot.data[index];
+                    //return MainPageItem(listObject.id, listObject.name, listObject.score)
                     return MainPageItem(listObject.id, listObject.name)
                         .buildTitle(context);
                     //method to test that the long press work(for the edit function)
@@ -62,10 +63,9 @@ class _Lists extends State<ListsPage> {
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
                   Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddList()),
-                );
+                    context,
+                    MaterialPageRoute(builder: (context) => AddList()),
+                  );
                 },
                 child: Icon(Icons.add),
               ),
@@ -83,7 +83,7 @@ class _Lists extends State<ListsPage> {
     Query query = firestoreInstance.collection(firestoreUser.email);
     await query.get().then((querySnapshot) async {
       querySnapshot.docs.forEach((document) {
-        if(document.id.length > 6){
+        if (document.id.length > 6) {
           lists.add(new ListObject(document.id, document.data().values.first));
         }
       });
@@ -104,10 +104,11 @@ abstract class ListItem {
 class MainPageItem implements ListItem {
   final String id;
   final String heading;
-  final String score = '10/20';
+  final String score = '10';
   final String scoreHeading = 'Last score';
 
   MainPageItem(this.id, this.heading);
+  //MainPageItem(this.id, this.heading, this.score);
 
   Widget buildTitle(BuildContext context) {
     return Row(
@@ -143,7 +144,7 @@ class MainPageItem implements ListItem {
                     style: TextStyle(fontSize: 25.0, color: Colors.black87),
                   ),
                   Text(
-                    score,
+                    score + "%",
                     style: TextStyle(fontSize: 20.0, color: Colors.black54),
                   ),
                 ],
