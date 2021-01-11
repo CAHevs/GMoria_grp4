@@ -15,7 +15,6 @@ class PersonDetails extends StatelessWidget{
 
   var notes; 
   String _image;
-  File _storedImage;
   final picker = ImagePicker();
 
   @override
@@ -81,10 +80,8 @@ class PersonDetails extends StatelessWidget{
 
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    print(pickedFile.path);
     if(pickedFile != null){
       final String fileName = basename(pickedFile.path);
-      print(fileName);
       var appDir;
       try{
          appDir = await getApplicationDocumentsDirectory();
@@ -93,9 +90,7 @@ class PersonDetails extends StatelessWidget{
       }
       
       final appDocPath = appDir.path;
-      print(appDocPath);
       final filePath = '$appDocPath/$fileName';
-      print(filePath);
       final File selectedImage = File(pickedFile.path);
       final File localImage = await selectedImage.copy('$filePath');
       _image = localImage.path;
