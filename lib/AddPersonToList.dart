@@ -49,6 +49,14 @@ class _addPerson extends State<AddPersonToList> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Add person"),
+        leading: new IconButton(
+            icon: new Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ListPerson(listId, listName)));
+            }),
       ),
       body: Center(child: buildAddPersonToList(context)),
       floatingActionButton: FloatingActionButton(

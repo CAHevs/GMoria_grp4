@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
+import 'package:gmoria_grp4/list_person.dart';
 
 //Class containing the list with all person inside a selected list and display them
 class AddAlreadyExistUser extends StatelessWidget {
@@ -21,6 +22,14 @@ class AddAlreadyExistUser extends StatelessWidget {
       return new Scaffold(
         appBar: AppBar(
           title: Text("add to $listName"),
+          leading: new IconButton(
+              icon: new Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ListPerson(listId, listName)));
+              }),
         ),
         body: ListView.builder(
             itemCount: availableUser.length,

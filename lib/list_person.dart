@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
+import 'package:gmoria_grp4/lists.dart';
 import 'package:gmoria_grp4/person_card.dart';
 
 import 'AddPersonToList.dart';
@@ -26,6 +27,12 @@ class ListPerson extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: Text(name),
+              leading: new IconButton(
+                  icon: new Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ListsPage()));
+                  }),
             ),
             body: ListView.builder(
                 itemCount: snapshot.data.length,
@@ -49,6 +56,12 @@ class ListPerson extends StatelessWidget {
           return new Scaffold(
             appBar: AppBar(
               title: Text(name),
+              leading: new IconButton(
+                  icon: new Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ListsPage()));
+                  }),
             ),
             body: Text("No one is in this list"),
             floatingActionButton: FloatingActionButton(
