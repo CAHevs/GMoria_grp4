@@ -85,21 +85,23 @@ List<Users> shuffle(List<Users> items) {
 //Main class for the CustomNumberGamemode
 class NormalGameMode extends StatefulWidget {
   final String id;
-  NormalGameMode(this.id);
+  final String listName;
+  NormalGameMode(this.id, this.listName);
 
   @override
   State<StatefulWidget> createState() {
     users = genCode(id);
-    return new NormalGamemodeState(id);
+    return new NormalGamemodeState(id, this.listName);
   }
 }
 //State class for all the state of game pages
 class NormalGamemodeState extends State<NormalGameMode> {
   String id;
+  String listName;
   var personName;
   var _controller = TextEditingController();
 
-  NormalGamemodeState(this.id);
+  NormalGamemodeState(this.id, this.listName);
 
   @override
   Widget build(BuildContext context) {
@@ -294,7 +296,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
       Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => new SelectionModPage(id)));
+              builder: (context) => new SelectionModPage(id, listName)));
     });
   }
 

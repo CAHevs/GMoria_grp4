@@ -47,7 +47,7 @@ class ListPerson extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final Users user = snapshot.data[index];
                   print("${user.firstname} ${user.lastname}");
-                  return PersonList(user).buildTitle(context);
+                  return PersonList(user, id, name).buildTitle(context);
                 }),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
@@ -160,8 +160,10 @@ abstract class ListItem {
 /// A ListItem that contains a picture and the name of the person
 class PersonList implements ListItem {
   final Users person;
+  final String listId;
+  final String listName;
 
-  PersonList(this.person);
+  PersonList(this.person, this.listId, this.listName);
 
   Widget buildTitle(BuildContext context) {
     var heading = person.firstname + " " + person.lastname;
@@ -185,7 +187,7 @@ class PersonList implements ListItem {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PersonCard(person)),
+            MaterialPageRoute(builder: (context) => PersonCard(person, listId, listName)),
           );
         },
         onLongPress: () {

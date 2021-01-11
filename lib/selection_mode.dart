@@ -9,8 +9,8 @@ import 'package:gmoria_grp4/lists.dart';
 class SelectionModPage extends StatelessWidget {
 
   final String id;
-
-  SelectionModPage(this.id);
+  final String listName;
+  SelectionModPage(this.id, this.listName);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class SelectionModPage extends StatelessWidget {
           }),
       ),
       body: Center(
-        child: SelectionModeRows(id).build(context),
+        child: SelectionModeRows(id, listName).build(context),
       ),
     );
   }
@@ -33,17 +33,18 @@ class SelectionModPage extends StatelessWidget {
 class SelectionModeRows extends StatelessWidget {
 
   final String id;
-  SelectionModeRows(this.id);
+  final String listName;
+  SelectionModeRows(this.id, this.listName);
 
   Widget build(BuildContext context) {
     return Container(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        TrainingModeButton(id).buildTitle(context),
-        FullListGameModeButton(id).buildTitle(context),
-        MistakesModeButton(id).buildTitle(context),
-        NumberModeButton(id).buildTitle(context)
+        TrainingModeButton(id, listName).buildTitle(context),
+        FullListGameModeButton(id, listName).buildTitle(context),
+        MistakesModeButton(id, listName).buildTitle(context),
+        NumberModeButton(id,listName).buildTitle(context)
       ],
     ));
   }
@@ -58,8 +59,9 @@ class NumberModeButton implements ModeButton {
 
   final String id;
   var number;
+  final String listName;
   final num = TextEditingController();
-  NumberModeButton(this.id);
+  NumberModeButton(this.id, this.listName);
 
 
   @override
@@ -105,7 +107,7 @@ class NumberModeButton implements ModeButton {
           } else {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CustomNumberGameMode(id, number)),
+              MaterialPageRoute(builder: (context) => CustomNumberGameMode(id, number, listName)),
           );
           }
 
@@ -149,9 +151,8 @@ class NumberModeButton implements ModeButton {
 class MistakesModeButton implements ModeButton {
 
   final String id;
-
-
-  MistakesModeButton(this.id);
+  final String listName;
+  MistakesModeButton(this.id, this.listName);
 
   Widget buildTitle(BuildContext context) {
     return new RaisedButton(
@@ -177,7 +178,7 @@ class MistakesModeButton implements ModeButton {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MistakesGameMode(id)),
+            MaterialPageRoute(builder: (context) => MistakesGameMode(id, listName)),
           );
         });
   }
@@ -188,8 +189,8 @@ class TrainingModeButton implements ModeButton {
 
 
   final String id;
-
-  TrainingModeButton(this.id);
+  final String listName;
+  TrainingModeButton(this.id, this.listName);
 
   Widget buildTitle(BuildContext context) {
     return new RaisedButton(
@@ -215,7 +216,7 @@ class TrainingModeButton implements ModeButton {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => TrainingList(id)),
+            MaterialPageRoute(builder: (context) => TrainingList(id, listName)),
           );
         });
   }
@@ -224,11 +225,9 @@ class TrainingModeButton implements ModeButton {
 //Training mode button
 class FullListGameModeButton implements ModeButton {
 
-
   final String id;
-
-
-  FullListGameModeButton(this.id);
+  final String listName;
+  FullListGameModeButton(this.id, this.listName);
 
   Widget buildTitle(BuildContext context) {
     return new RaisedButton(
@@ -254,7 +253,7 @@ class FullListGameModeButton implements ModeButton {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => NormalGameMode(id)),
+            MaterialPageRoute(builder: (context) => NormalGameMode(id, listName)),
           );
         });
   }

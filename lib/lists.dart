@@ -106,12 +106,12 @@ abstract class ListItem {
 //to the selection game mode page
 class MainPageItem implements ListItem {
   final String id;
-  final String heading;
+  final String name;
   final int score;
   final String scoreHeading = 'Last score';
 
   //MainPageItem(this.id, this.heading);
-  MainPageItem(this.id, this.heading, this.score);
+  MainPageItem(this.id, this.name, this.score);
 
   Widget buildTitle(BuildContext context) {
     return Row(
@@ -121,18 +121,18 @@ class MainPageItem implements ListItem {
               child: Row(children: [
             InkWell(
               child: Text(
-                heading,
+                name,
                 style: Theme.of(context).textTheme.headline5,
               ),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ListPerson(id, heading)),
+                      builder: (context) => ListPerson(id, name)),
                 );
               },
               onLongPress: () {
-                print("edit the list " + heading);
+                print("edit the list " + name);
               },
             )
           ])),
@@ -164,7 +164,7 @@ class MainPageItem implements ListItem {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SelectionModPage(id)),
+                              builder: (context) => SelectionModPage(id, name)),
                         );
                       })
                 ],

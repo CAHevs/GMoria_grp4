@@ -97,22 +97,24 @@ List<Users> shuffle(List<Users> items) {
 //Main class for the CustomNumberGamemode
 class MistakesGameMode extends StatefulWidget {
   final String id;
-  MistakesGameMode(this.id);
+  final String listName;
+  MistakesGameMode(this.id, this.listName);
 
   @override
   State<StatefulWidget> createState() {
     users = genCode(id);
     //users = shuffle(users);
-    return new MistakesGamemodeState(id);
+    return new MistakesGamemodeState(id, listName);
   }
 }
 //State class for all the state of game pages
 class MistakesGamemodeState extends State<MistakesGameMode> {
-String id;
+  String id;
+  String listName;
   var personName;
   var _controller = TextEditingController();
 
-  MistakesGamemodeState(this.id);
+  MistakesGamemodeState(this.id, this.listName);
 
   @override
   Widget build(BuildContext context) {
@@ -307,7 +309,7 @@ String id;
       Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => new SelectionModPage(id)));
+              builder: (context) => new SelectionModPage(id, listName)));
     });
   }
 
