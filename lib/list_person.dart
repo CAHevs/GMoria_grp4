@@ -7,6 +7,7 @@ import 'package:gmoria_grp4/Objects/Users.dart';
 import 'package:gmoria_grp4/person_card.dart';
 
 import 'AddPersonToList.dart';
+import 'data_search.dart';
 
 //Class containing the list with all person inside a selected list and display them
 class ListPerson extends StatelessWidget {
@@ -26,6 +27,11 @@ class ListPerson extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: Text(name),
+              actions: <Widget> [
+                IconButton(icon: Icon(Icons.search), onPressed: () {
+                  showSearch(context: context, delegate: DataSearch(id));
+                },)
+              ]
             ),
             body: ListView.builder(
                 itemCount: snapshot.data.length,
@@ -41,7 +47,7 @@ class ListPerson extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => AddPersonToList()),
-                );
+                  );
                 },
                 child: Icon(Icons.add),
               ),

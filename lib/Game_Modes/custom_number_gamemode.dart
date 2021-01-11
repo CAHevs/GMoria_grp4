@@ -298,12 +298,6 @@ class CustomNumberGamemodeState extends State<CustomNumberGameMode> {
               title: Text('Custom list gamemode'),
             ),
             body: Text("No one is in this list"),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                print("add a list");
-              },
-              child: Icon(Icons.add),
-            ),
           );
         }
       },
