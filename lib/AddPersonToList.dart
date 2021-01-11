@@ -68,7 +68,6 @@ class _addPerson extends State<AddPersonToList> {
             print("The lastname can not be empty !");
           }
           addNewList();
-          //Clear the TextField or Go back
           Navigator.push(
               context,
               MaterialPageRoute(

@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gmoria_grp4/EditPerson.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
 import 'package:gmoria_grp4/lists.dart';
 import 'package:gmoria_grp4/person_card.dart';
@@ -47,7 +49,8 @@ class ListPerson extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final Users user = snapshot.data[index];
                   print("${user.firstname} ${user.lastname}");
-                  return PersonList(user).buildTitle(context);
+                  return PersonList(user, id, name, context)
+                      .buildTitle(context);
                 }),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
@@ -107,12 +110,13 @@ class ListPerson extends StatelessWidget {
         for (var i = 1; i < array.length; i++) {
           if (array[i] == ',' || array[i] == ']') {
             if (id == array.substring(i - 20, i)) {
-              lists.add(new Users(
+              lists.add(new Users.withlist(
                   document.id,
                   document.data()["firstname"],
                   document.data()["lastname"],
                   document.data()["image"],
-                  document.data()["note"]));
+                  document.data()["note"],
+                  document.data()["lists"].cast<String>().toList()));
             }
           }
         }
@@ -160,38 +164,99 @@ abstract class ListItem {
 /// A ListItem that contains a picture and the name of the person
 class PersonList implements ListItem {
   final Users person;
+  final String listId;
+  final String listName;
+  var context;
 
-  PersonList(this.person);
+  PersonList(this.person, this.listId, this.listName, this.context);
 
   Widget buildTitle(BuildContext context) {
     var heading = person.firstname + " " + person.lastname;
 
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      Expanded(
-        child: CircleAvatar(
-            radius: 55,
-            backgroundColor: Colors.white,
-            child: CircleAvatar(
-              radius: 50,
-              backgroundImage: FileImage(File(person.image)),
-            )),
-      ),
-      Container(
-          child: InkWell(
-        child: Text(
-          heading,
-          style: Theme.of(context).textTheme.headline5,
+    return Slidable(
+      actionPane: SlidableStrechActionPane(),
+      actionExtentRatio: 0.25,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        Expanded(
+          child: CircleAvatar(
+              radius: 55,
+              backgroundColor: Colors.white,
+              child: CircleAvatar(
+                radius: 50,
+                backgroundImage: FileImage(File(person.image)),
+              )),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => PersonCard(person)),
-          );
-        },
-        onLongPress: () {
-          print("edit the list " + heading);
-        },
-      ))
-    ]);
+        Container(
+            child: InkWell(
+          child: Text(
+            heading,
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PersonCard(person)),
+            );
+          },
+          onLongPress: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EditPerson(listId, listName, person)),
+            );
+          },
+        )),
+      ]),
+      secondaryActions: <Widget>[
+        IconSlideAction(
+          caption: 'Delete',
+          color: Colors.red,
+          icon: Icons.delete,
+          onTap: () => deletePerson(),
+        )
+      ],
+    );
+  }
+
+  void deletePerson() {
+    List<String> finalListPerson = person.lists;
+    String stringToRemove = "";
+
+    print(finalListPerson);
+
+    finalListPerson.forEach((element) {
+      if (element == listId) {
+        stringToRemove = element;
+      }
+    });
+
+    finalListPerson.remove(stringToRemove);
+
+    print(finalListPerson);
+
+    if (finalListPerson.isNotEmpty) {
+      FirebaseFirestore.instance
+          .collection(FirebaseAuth.instance.currentUser.email)
+          .doc("users")
+          .collection("users")
+          .doc(person.id)
+          .update({
+            'lists': finalListPerson,
+          })
+          .then((value) => print("User deleted"))
+          .catchError((error) => print("Failed to modify person: $error"));
+    } else {
+      FirebaseFirestore.instance
+          .collection(FirebaseAuth.instance.currentUser.email)
+          .doc("users")
+          .collection("users")
+          .doc(person.id)
+          .delete()
+          .then((value) => print("User deleted"))
+          .catchError((error) => print("Failed to modify person: $error"));
+    }
+
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ListPerson(listId, listName)));
   }
 }
