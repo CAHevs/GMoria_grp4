@@ -3,8 +3,9 @@ class ListObject {
   String name;
   String id;
   List<String> users;
+  int score;
 
-  ListObject(this.id, this.name);
+  ListObject(this.id, this.name, this.score);
 
   String getName() {
     return name;
@@ -16,6 +17,14 @@ class ListObject {
 
   List<String> getUsers() {
     return users;
+  }
+
+  int getScore(){
+    return score;
+  }
+
+  void setScore(int score){
+    this.score = score;
   }
 
   void setName(String name) {

@@ -14,7 +14,6 @@ class PersonDetails extends StatelessWidget {
 
   var notes;
   String _image;
-  File _storedImage;
   final picker = ImagePicker();
 
   @override
