@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
 import 'person_details.dart';
@@ -31,7 +33,7 @@ class PersonCard extends StatelessWidget{
         }),),
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.network(selectedUser.image, height: 300, width: 300,)
+          child: Image.file(File(selectedUser.image), height: 300, width: 300,)
         ),
       Padding(
         padding: EdgeInsets.all(30),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -150,7 +152,7 @@ class PersonList implements ListItem {
             backgroundColor: Colors.white,
             child: CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(person.image),
+              backgroundImage: FileImage(File(person.image)),
             )),
       ),
       Container(
