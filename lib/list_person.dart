@@ -14,8 +14,6 @@ class ListPerson extends StatelessWidget {
   final String name;
   ListPerson(this.id, this.name);
 
-  List<Users> personNotInTheList = new List<Users>();
-  List<Users> allPersoninDB = new List<Users>();
   var firestoreInstance = FirebaseFirestore.instance;
   var firestoreUser = FirebaseAuth.instance.currentUser;
 
@@ -41,8 +39,7 @@ class ListPerson extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AddPersonToList(
-                          id, personNotInTheList, allPersoninDB, name)),
+                      builder: (context) => AddPersonToList(id, name)),
                 );
               },
               child: Icon(Icons.add),
@@ -59,8 +56,7 @@ class ListPerson extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AddPersonToList(
-                          id, personNotInTheList, allPersoninDB, name)),
+                      builder: (context) => AddPersonToList(id, name)),
                 );
               },
               child: Icon(Icons.add),
@@ -87,21 +83,6 @@ class ListPerson extends StatelessWidget {
       querySnapshot.docs.forEach((document) {
         String array = document.data()["lists"].toString();
 
-        personNotInTheList.add(new Users(
-            document.id,
-            document.data()["firstname"],
-            document.data()["lastname"],
-            document.data()["image"],
-            document.data()["note"]));
-
-        allPersoninDB.add(new Users.withlist(
-            document.id,
-            document.data()["firstname"],
-            document.data()["lastname"],
-            document.data()["image"],
-            document.data()["note"],
-            document.data()["lists"]));
-
         for (var i = 1; i < array.length; i++) {
           if (array[i] == ',' || array[i] == ']') {
             if (id == array.substring(i - 20, i)) {
@@ -111,9 +92,6 @@ class ListPerson extends StatelessWidget {
                   document.data()["lastname"],
                   document.data()["image"],
                   document.data()["note"]));
-
-              personNotInTheList
-                  .removeWhere((element) => element.id == document.id);
             }
           }
         }

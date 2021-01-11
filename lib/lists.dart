@@ -36,20 +36,13 @@ class _Lists extends State<ListsPage> {
                 child: ListView(
                   children: <Widget>[
                     new UserAccountsDrawerHeader(
-                      accountName: new Text(''), 
-                      accountEmail: new Text(firestoreUser.email)
-                      ),
+                        accountName: new Text(''),
+                        accountEmail: new Text(firestoreUser.email)),
                     new ListTile(
-                      title: new Text('Delete account'),
-                      onTap:() {
-
-                      }
-                    ),
-                    new ListTile(
-                      title: new Text('Settings'),
-                      onTap:() {}
-                    )
-                  ],),
+                        title: new Text('Delete account'), onTap: () {}),
+                    new ListTile(title: new Text('Settings'), onTap: () {})
+                  ],
+                ),
               ),
               body: ListView.builder(
                   itemCount: snapshot.data.length,
@@ -62,10 +55,9 @@ class _Lists extends State<ListsPage> {
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
                   Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddList()),
-                );
+                    context,
+                    MaterialPageRoute(builder: (context) => AddList()),
+                  );
                 },
                 child: Icon(Icons.add),
               ),
@@ -83,8 +75,8 @@ class _Lists extends State<ListsPage> {
     Query query = firestoreInstance.collection(firestoreUser.email);
     await query.get().then((querySnapshot) async {
       querySnapshot.docs.forEach((document) {
-        if(document.id.length > 6){
-          lists.add(new ListObject(document.id, document.data().values.first));
+        if (document.id.length > 6) {
+          lists.add(new ListObject(document.id, document.data()['name']));
         }
       });
     });

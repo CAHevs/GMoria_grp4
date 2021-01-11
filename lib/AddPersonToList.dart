@@ -1,39 +1,43 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gmoria_grp4/AddAlreadyExistUser.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
 import 'package:gmoria_grp4/list_person.dart';
-import 'package:gmoria_grp4/lists.dart';
+import 'package:path/path.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 //Class based on add_list.dart to add a person to the list
 class AddPersonToList extends StatefulWidget {
   final String listId;
-  final List<Users> personNotInTheList;
-  final List<Users> allPersonInDb;
   final String listName;
 
-  AddPersonToList(
-      this.listId, this.personNotInTheList, this.allPersonInDb, this.listName);
+  AddPersonToList(this.listId, this.listName);
 
   @override
-  _addPerson createState() =>
-      _addPerson(listId, personNotInTheList, allPersonInDb, listName);
+  _addPerson createState() => _addPerson(listId, listName);
 }
 
 class _addPerson extends State<AddPersonToList> {
   final String listId;
-  final List<Users> personNotInTheList;
-  final List<Users> allPersonInDb;
   final String listName;
+  final picker = ImagePicker();
 
-  _addPerson(
-      this.listId, this.personNotInTheList, this.allPersonInDb, this.listName);
+  _addPerson(this.listId, this.listName);
 
   Users selectedUser = new Users.empty();
   var firstname, lastname, image;
+  String _image = "";
   var userLoggedIn = FirebaseAuth.instance.currentUser;
   CollectionReference insertPath;
   CollectionReference userCollectionInsideList;
+  var firestoreInstance = FirebaseFirestore.instance;
+  var firestoreUser = FirebaseAuth.instance.currentUser;
+  List<Users> personNotInTheList = new List<Users>();
+  List<Users> allPersonInDb = new List<Users>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +45,7 @@ class _addPerson extends State<AddPersonToList> {
         .collection(userLoggedIn.email)
         .doc("users")
         .collection("users");
+    getAllUsersFromAList();
     return Scaffold(
       appBar: AppBar(
         title: Text("Add person"),
@@ -72,6 +77,19 @@ class _addPerson extends State<AddPersonToList> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                  width: 300,
+                  margin: new EdgeInsets.symmetric(vertical: 20.0),
+                  child: TextButton(
+                    child: Text("Add existing user"),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddAlreadyExistUser(
+                                  personNotInTheList, listId, listName)));
+                    },
+                  )),
               Container(
                   width: 300,
                   margin: new EdgeInsets.symmetric(vertical: 20.0),
@@ -107,7 +125,9 @@ class _addPerson extends State<AddPersonToList> {
                   margin: new EdgeInsets.symmetric(vertical: 20.0),
                   child: TextButton(
                     child: Text("Add an image"),
-                    onPressed: () {},
+                    onPressed: () {
+                      getImage();
+                    },
                   ))
             ],
           )
@@ -115,57 +135,69 @@ class _addPerson extends State<AddPersonToList> {
       );
 
   Future<void> addNewList() {
-    //check si le gars existe déjà
-    bool userAlreadyExist = false;
-    bool userAlreadyInList = false;
-    String existUserId = "";
-    List<String> newUserList = new List();
-
-    allPersonInDb.forEach((element) {
-      if (element.firstname == firstname && element.lastname == lastname) {
-        userAlreadyExist = true;
-        existUserId = element.id;
-        newUserList = element.lists;
-
-        element.lists.forEach((element) {
-          if (element == listId) {
-            userAlreadyInList = true;
-          }
-        });
-
-        newUserList.add(listId);
-      }
-    });
-
-    if (!userAlreadyExist) {
-      return insertPath
-          .add({
-            'firstname': firstname,
-            'lastname': lastname,
-            'image':
-                "https://www.seekpng.com/png/detail/202-2024994_profile-icon-profile-logo-no-background.png",
-            'lists': [listId],
-            'mistake': false,
-            'note': "",
-          })
-          .then((value) => print("User added"))
-          .catchError((error) => print("Failed to add list: $error"));
-    } else {
-      if (!userAlreadyInList) {
-        return insertPath
-            .doc(existUserId)
-            .update({
-              'lists': newUserList,
-            })
-            .then((value) => print("Already exist user added"))
-            .catchError((error) => print("Failed to add list: $error"));
-      } else {
-        return insertPath
-            .doc(existUserId)
-            .update({})
-            .then((value) => print("Already exist user added"))
-            .catchError((error) => print("Failed to add list: $error"));
-      }
+    if (_image == "") {
+      _image = "images/profil.png"; //image par défaut
     }
+    return insertPath
+        .add({
+          'firstname': firstname,
+          'lastname': lastname,
+          'image': _image,
+          'lists': [listId],
+          'mistake': false,
+          'note': "",
+        })
+        .then((value) => print("User added"))
+        .catchError((error) => print("Failed to add list: $error"));
+  }
+
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final String fileName = basename(pickedFile.path);
+      var appDir;
+      try {
+        appDir = await getApplicationDocumentsDirectory();
+      } on Exception catch (e) {
+        print(e);
+      }
+
+      final appDocPath = appDir.path;
+      final filePath = '$appDocPath/$fileName';
+      final File selectedImage = File(pickedFile.path);
+      final File localImage = await selectedImage.copy('$filePath');
+      _image = localImage.path;
+    } else {
+      _image = "images/profil.png"; //l'image par défaut
+    }
+  }
+
+  void getAllUsersFromAList() async {
+    Query query = firestoreInstance
+        .collection(firestoreUser.email)
+        .doc("users")
+        .collection("users");
+    await query.get().then((querySnapshot) async {
+      querySnapshot.docs.forEach((document) {
+        String array = document.data()["lists"].toString();
+
+        personNotInTheList.add(new Users.withlist(
+            document.id,
+            document.data()["firstname"],
+            document.data()["lastname"],
+            document.data()["image"],
+            document.data()["note"],
+            document.data()["lists"].cast<String>().toList()));
+
+        for (var i = 1; i < array.length; i++) {
+          if (array[i] == ',' || array[i] == ']') {
+            if (listId == array.substring(i - 20, i)) {
+              personNotInTheList
+                  .removeWhere((element) => element.id == document.id);
+            }
+          }
+        }
+      });
+    });
   }
 }
