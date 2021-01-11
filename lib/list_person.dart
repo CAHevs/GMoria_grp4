@@ -258,5 +258,7 @@ class PersonList implements ListItem {
 
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => ListPerson(listId, listName)));
+      ))
+    ]);
   }
 }

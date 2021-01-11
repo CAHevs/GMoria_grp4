@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:gmoria_grp4/list_person.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +11,13 @@ import 'package:image_picker/image_picker.dart';
 //Class for the page with all the information regarding a person
 class PersonDetails extends StatelessWidget {
   final Users selectedUser;
-  PersonDetails(this.selectedUser);
+  final String listId;
+  final String listName;
+
+  final String image;
+
+  PersonDetails(this.selectedUser, this.listId, this.listName, [this.image = ""]);
+
 
   var notes;
   String _image;
@@ -19,17 +26,24 @@ class PersonDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var title = selectedUser.firstname + " " + selectedUser.lastname;
-    _image = selectedUser.image;
+    notes = selectedUser.note;
+    if(image != ""){
+      _image = image;
+    }else{
+      _image = selectedUser.image;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
       ),
       body: Center(
-        child: buildAllInformation(),
+        child: buildAllInformation(context),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           savePerson();
+
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ListPerson(listId, listName)));
         },
         child: Icon(Icons.save),
       ),
@@ -37,7 +51,7 @@ class PersonDetails extends StatelessWidget {
   }
 
   //Widget that will build all the fields
-  Widget buildAllInformation() => Column(
+  Widget buildAllInformation(BuildContext context) => Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           ClipRRect(
@@ -50,7 +64,7 @@ class PersonDetails extends StatelessWidget {
           IconButton(
               icon: Icon(Icons.add_a_photo),
               onPressed: () {
-                getImage();
+                getImage(context);
               }),
           Container(
               width: 300,
@@ -80,7 +94,7 @@ class PersonDetails extends StatelessWidget {
         .update({'note': notes, 'image': _image});
   }
 
-  Future getImage() async {
+  Future getImage(BuildContext context) async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       final String fileName = basename(pickedFile.path);
@@ -99,5 +113,6 @@ class PersonDetails extends StatelessWidget {
     } else {
       _image = selectedUser.image;
     }
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PersonDetails(selectedUser, listId, listName, _image)));
   }
 }

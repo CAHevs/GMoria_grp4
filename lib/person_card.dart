@@ -8,7 +8,9 @@ import 'person_details.dart';
 class PersonCard extends StatelessWidget{
 
   final Users selectedUser; 
-  PersonCard(this.selectedUser); 
+  final String listId;
+  final String listName;
+  PersonCard(this.selectedUser, this.listId, this.listName); 
   
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class PersonCard extends StatelessWidget{
       Align(alignment: Alignment.bottomRight,
       child: IconButton(icon: Icon(Icons.info_outline),
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => PersonDetails(selectedUser)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PersonDetails(selectedUser, listId, listName)));
         }),),
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
