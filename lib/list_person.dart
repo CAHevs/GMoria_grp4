@@ -195,7 +195,7 @@ class PersonList implements ListItem {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PersonCard(person)),
+              MaterialPageRoute(builder: (context) => PersonCard(person, listId, listName)),
             );
           },
           onLongPress: () {
@@ -258,7 +258,7 @@ class PersonList implements ListItem {
 
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => ListPerson(listId, listName)));
-      ))
-    ]);
+
+
   }
 }
