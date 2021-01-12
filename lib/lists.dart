@@ -45,7 +45,8 @@ class _Lists extends State<ListsPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => SettingsPage()),
+                            MaterialPageRoute(
+                                builder: (context) => SettingsPage()),
                           );
                         })
                   ],
@@ -56,7 +57,8 @@ class _Lists extends State<ListsPage> {
                   itemBuilder: (BuildContext context, int index) {
                     final ListObject listObject = snapshot.data[index];
                     //return MainPageItem(listObject.id, listObject.name, listObject.score)
-                    return MainPageItem(listObject.id, listObject.name, listObject.score)
+                    return MainPageItem(
+                            listObject.id, listObject.name, listObject.score)
                         .buildTitle(context);
                     //method to test that the long press work(for the edit function)
                   }),
@@ -84,7 +86,8 @@ class _Lists extends State<ListsPage> {
     await query.get().then((querySnapshot) async {
       querySnapshot.docs.forEach((document) {
         if (document.id.length > 6) {
-          lists.add(new ListObject(document.id, document.data()['name'], document.data()['score']));
+          lists.add(new ListObject(
+              document.id, document.data()['name'], document.data()['score']));
         }
       });
     });
@@ -103,12 +106,12 @@ abstract class ListItem {
 //to the selection game mode page
 class MainPageItem implements ListItem {
   final String id;
-  final String heading;
+  final String name;
   final int score;
   final String scoreHeading = 'Last score';
 
   //MainPageItem(this.id, this.heading);
-  MainPageItem(this.id, this.heading, this.score);
+  MainPageItem(this.id, this.name, this.score);
 
   Widget buildTitle(BuildContext context) {
     return Row(
@@ -118,18 +121,18 @@ class MainPageItem implements ListItem {
               child: Row(children: [
             InkWell(
               child: Text(
-                heading,
+                name,
                 style: Theme.of(context).textTheme.headline5,
               ),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ListPerson(id, heading)),
+                      builder: (context) => ListPerson(id, name)),
                 );
               },
               onLongPress: () {
-                print("edit the list " + heading);
+                print("edit the list " + name);
               },
             )
           ])),
@@ -161,7 +164,7 @@ class MainPageItem implements ListItem {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SelectionModPage(id)),
+                              builder: (context) => SelectionModPage(id, name)),
                         );
                       })
                 ],

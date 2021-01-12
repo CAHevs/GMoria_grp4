@@ -5,8 +5,14 @@ class Users {
   String lastname;
   String image;
   String note;
+  List<String> lists;
 
   Users(this.id, this.firstname, this.lastname, this.image, this.note);
+
+  Users.withlist(this.id, this.firstname, this.lastname, this.image, this.note,
+      this.lists);
+
+  Users.empty();
 
   String getId() {
     return id;
@@ -24,11 +30,11 @@ class Users {
     return image;
   }
 
-  String getNote(){
+  String getNote() {
     return note;
   }
 
-  void setNote(String note){
+  void setNote(String note) {
     this.note = note;
   }
 

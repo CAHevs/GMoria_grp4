@@ -11,8 +11,8 @@ class TrainingList extends StatelessWidget {
   var firestoreInstance = FirebaseFirestore.instance;
   var firestoreUser = FirebaseAuth.instance.currentUser;
   String id;
-
-  TrainingList(this.id);
+  String listName;
+  TrainingList(this.id, this.listName);
 
   @override
   //for each person we build a card and we can swipe through them
@@ -30,7 +30,7 @@ Widget build(BuildContext context) {
           itemCount: snapshot.data.length,
           itemBuilder: (BuildContext context, int index) {
             final Users user = snapshot.data[index];
-            return SwipeableCard(user);//the cards
+            return SwipeableCard(user, id, listName);//the cards
           },
           viewportFraction: 0.8,
           scale: 0.9,
@@ -97,7 +97,9 @@ Widget build(BuildContext context) {
 class SwipeableCard extends StatelessWidget {
 
   Users user;
-  SwipeableCard(this.user);
+  String listId;
+  String listName;
+  SwipeableCard(this.user, this.listId, this.listName);
 
   Widget build(BuildContext context) {
     return Container(
@@ -111,7 +113,7 @@ class SwipeableCard extends StatelessWidget {
                 iconSize: 50.0,
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PersonDetails(user)));
+                      MaterialPageRoute(builder: (context) => PersonDetails(user, listId, listName)));
                 }),
           ),
           ClipRRect(

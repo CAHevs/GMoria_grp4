@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
                 //Return the login page
                 home: Scaffold(
                   body: LoginPage(),
-                   //go to the login page
+                  //go to the login page
                 ));
           } else {
             //if this is a user in the cache, go to the list page(a user is logged)
@@ -52,7 +52,8 @@ class MyApp extends StatelessWidget {
                 ),
                 //Return the login page
                 home: Scaffold(
-                  body: ListsPage(), //go to the list page and give the user loged in
+                  body:
+                      ListsPage(), //go to the list page and give the user loged in
                 ));
           }
         }
