@@ -44,61 +44,11 @@ class DataSearch extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     //Show the recent search or show only the result that match with the query
-    final suggestionList = query.isEmpty
-        ? recentSearch
-        : searchList.where((p) => p.startsWith(query)).toList();
-
-    return FutureBuilder(
-      future: genCode(id),
-      builder: (BuildContext context, AsyncSnapshot<List<Users>> snapshot) {
-        if (snapshot.hasData && snapshot.data.length > 0) {
-
-          final suggestionList = [];
-          for(var i = 1; i < snapshot.data.length; i++){
-            print(snapshot.data.length);
-            suggestionList[i] = snapshot.data[i].firstname+" "+snapshot.data[i].lastname;
-          }
-
-          var result = [];
-
-          result = suggestionList.where((p) => p.contains(query)).toList();
-
-          return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                final Users user = snapshot.data[index];
-                print(index);
-                return ListTile(
-                  onTap: () {
-                    showResults(context);
-                  },
-                  leading: Icon(
-                    Icons.person,
-                    size: 50.0,
-                  ),
-                  
-                  title: Text(result[index]),
-                );
-              });
-        }
-      },
-    );
-
-    /*
-    return ListView.builder(
-      itemBuilder: (context, index) => ListTile(
-        onTap: () {
-          showResults(context);
-
-        },
-        leading: Icon(Icons.person, size: 50.0,),
-        title: Text(suggestionList[index]),
-        ),
-        itemCount: suggestionList.length,
-      );*/
+ 
+    
+  
   }
 }
-
 //Method for get all the people of a list
 Future<List<Users>> genCode(id) async {
   return await getAllUsersFromAList(id);
