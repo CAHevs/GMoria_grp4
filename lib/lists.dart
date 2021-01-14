@@ -149,7 +149,6 @@ class MainPageItem implements ListItem {
   final String id;
   final String name;
   final int score;
-  final String scoreHeading = 'Last score';
   final BuildContext context;
 
   //MainPageItem(this.id, this.heading);
@@ -190,7 +189,7 @@ class MainPageItem implements ListItem {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  scoreHeading,
+                  AppLocalizations.of(context).translate('lastScore'),
                   style: TextStyle(fontSize: 25.0, color: Colors.black87),
                 ),
                 Text(
@@ -216,12 +215,12 @@ class MainPageItem implements ListItem {
                     })
               ],
             )
-          ],
-        ))
-      ]),
+          ])),
+        ]),
+        
       secondaryActions: <Widget>[
         IconSlideAction(
-          caption: 'Delete',
+          caption: AppLocalizations.of(context).translate('Delete'),
           color: Colors.red,
           icon: Icons.delete,
           onTap: () {
@@ -231,7 +230,7 @@ class MainPageItem implements ListItem {
             );
           },
         )
-      ],
+      ]
     );
   }
 

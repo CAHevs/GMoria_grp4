@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/lists.dart';
 
 //the class for sign up in our app
@@ -16,7 +17,7 @@ class _SignUpPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign up'),
+        title: Text(AppLocalizations.of(context).translate("SignUp")),
       ),
       body: Form(
         key: _formKey,
@@ -26,7 +27,7 @@ class _SignUpPageState extends State<SignupPage> {
               // ignore: missing_return
               validator: (input) {
                 if (input.isEmpty) {
-                  return 'Please type an email';
+                  return AppLocalizations.of(context).translate("NoEmail");
                 }
               },
               onSaved: (input) => _email = input,
@@ -37,33 +38,33 @@ class _SignUpPageState extends State<SignupPage> {
               validator: (input) {
                 _tempPassword = input;
                 if (input.isEmpty) {
-                  return 'Please provide a password';
+                  return AppLocalizations.of(context).translate("NoPassword");
                 }
                 if (input.length < 8) {
-                  return 'Your password needs to be at least 8 characters';
+                  return AppLocalizations.of(context).translate("PasswordNeeded");
                 }
               },
               onSaved: (input) => _tempPassword = input,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context).translate("Password")),
               obscureText: true,
             ),
             TextFormField(
               // ignore: missing_return
               validator: (input) {
                 if (input.isEmpty) {
-                  return 'Please repeat a password';
+                  return AppLocalizations.of(context).translate("RepeatPwd");
                 }
                 if (input != _tempPassword) {
-                  return 'The passwords must match';
+                  return AppLocalizations.of(context).translate("MatchPwd");
                 }
               },
               onSaved: (input) => _password = input,
-              decoration: InputDecoration(labelText: 'Confirm password'),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context).translate("ConfirmPassword")),
               obscureText: true,
             ),
             RaisedButton(
               onPressed: signUp,
-              child: Text('Sign up'),
+              child: Text(AppLocalizations.of(context).translate("SignUp")),
             )
           ],
         ),

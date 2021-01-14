@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Game_Modes/training_mode.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'Game_Modes/custom_number_gamemode.dart';
 import 'Game_Modes/mistakes_gamemode.dart';
 import 'Game_Modes/normal_gamemode.dart';
@@ -94,7 +95,7 @@ class NumberModeButton implements ModeButton {
                 decoration: const BoxDecoration(color: Colors.blue),
                 padding: EdgeInsets.all(20.0),
                 child: Text(
-                  'Custom number mode',
+                  AppLocalizations.of(context).translate("CustomMode"),
                   style: TextStyle(fontSize: 13.0, color: Colors.white),
                 ),
               )
@@ -168,7 +169,7 @@ class MistakesModeButton implements ModeButton {
                 decoration: const BoxDecoration(color: Colors.blue),
                 padding: EdgeInsets.all(20.0),
                 child: Text(
-                  'Play with mistakes',
+                  AppLocalizations.of(context).translate("MistakesMode"),
                   style: TextStyle(fontSize: 17.0, color: Colors.white),
                 ),
               )
@@ -206,7 +207,7 @@ class TrainingModeButton implements ModeButton {
                 decoration: const BoxDecoration(color: Colors.blue),
                 padding: EdgeInsets.all(20.0),
                 child: Text(
-                  'Training mode',
+                  AppLocalizations.of(context).translate("TrainingMode"),
                   style: TextStyle(fontSize: 17.0, color: Colors.white),
                 ),
               )
@@ -243,7 +244,7 @@ class FullListGameModeButton implements ModeButton {
                 decoration: const BoxDecoration(color: Colors.blue),
                 padding: EdgeInsets.all(20.0),
                 child: Text(
-                  'Full list mode',
+                  AppLocalizations.of(context).translate("FullListMode"),
                   style: TextStyle(fontSize: 17.0, color: Colors.white),
                 ),
               )

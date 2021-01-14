@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/EditPerson.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/lists.dart';
 import 'package:gmoria_grp4/person_card.dart';
 
@@ -75,7 +76,7 @@ class ListPerson extends StatelessWidget {
                   }),
             ),
             body: Center(
-              child: Text("No one is in this list"),
+              child: Text(AppLocalizations.of(context).translate("NoPersonInList")),
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
@@ -212,7 +213,7 @@ class PersonList implements ListItem {
       ]),
       secondaryActions: <Widget>[
         IconSlideAction(
-          caption: 'Delete',
+          caption: AppLocalizations.of(context).translate("Delete"),
           color: Colors.red,
           icon: Icons.delete,
           onTap: () => deletePerson(),

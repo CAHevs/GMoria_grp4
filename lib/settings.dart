@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/Setup/signIn.dart';
 import 'package:gmoria_grp4/lists.dart';
 
@@ -9,7 +10,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: Text(AppLocalizations.of(context).translate('settings')),
         leading: new IconButton(
             icon: new Icon(Icons.arrow_back),
             onPressed: () {
@@ -34,7 +35,7 @@ class SettingsPage extends StatelessWidget {
                         _buildPopupDialog(context),
                   );
                 },
-                child: new Text("Delete account",
+                child: new Text(AppLocalizations.of(context).translate('deleteAccount'),
                     style: new TextStyle(fontSize: 25.0, color: Colors.white))),
             new Padding(
               padding: EdgeInsets.all(30.0),

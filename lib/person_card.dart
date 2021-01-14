@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'person_details.dart';
 
 //Class that will display the "person's card"
@@ -16,7 +17,7 @@ class PersonCard extends StatelessWidget{
   Widget build(BuildContext context) {
      return Scaffold(
       appBar: AppBar(
-        title: Text("Person Card"),
+        title: Text(AppLocalizations.of(context).translate("PersonCard")),
         
       ),
       body: Center(child: buildInfoCard(context)

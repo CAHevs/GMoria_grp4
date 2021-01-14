@@ -4,10 +4,12 @@
     "lastScore": "Dernier score",
     "AddNewList": "Ajouter une nouvelle liste",
     "NewList": "Nouvelle liste",
+    "HintNewList": "Entrer le nom",
     "AddPerson": "Ajouter une personne",
     "AddExistingUser": "Ajouter une personne existante",
     "Firstname": "prénom",
     "Lastname": "nom",
+    "NameNoEmpty": "Le nom ne peut pas être vide",
     "AddAnImage": "Ajouter une image",
     "PersonCard": "Carte personnelle",
     "TrainingMode": "Mode d'entrainement",
@@ -18,8 +20,23 @@
     "FinalScore": "Score final",
     "ResetQuiz": "Relancer",
     "Home": "Accueil",
-    "NormalGameScore": "Page de score !"
-
+    "NoPersonInList": "Personne dans la liste",
+    "Delete": "Supprimer",
+    "ModifyImage": "Modifier l'image",
+    "FirstnameNotEmpty": "Le prénom ne peut pas être vide",
+    "LastnameNotEmpty": "Le nom ne peut pas être vide",
+    "Edit": "Modifier",
+    "NoEmail": "Rentrer un email",
+    "NoPassword": "Donner un mot de passe",
+    "PasswordNeeded": "Votre mot de passe doit être de minimum 8 charactères",
+    "Password": "Mot de passe",
+    "SignIn": "Se connecter",
+    "SignUp": "S'enregistrer",
+    "RepeatPwd": "Répéter un mot de passe",
+    "MatchPwd": "Les mots de passes doivent être similaires",
+    "ConfimPassword": "Confirmer le mot de passe",
+    "Loading": "Chargement",
+    "WaitLoading": "Chargement, veuillez attendre"
 
 
 }
