@@ -1,0 +1,25 @@
+{
+    "settings": "Settings",
+    "deleteAccount": "Delete account",
+    "lastScore": "Last score",
+    "AddNewList": "Add a new list",
+    "NewList": "New List",
+    "AddPerson": "Add person",
+    "AddExistingUser": "Add existing user",
+    "Firstname": "firstname",
+    "Lastname": "lastname",
+    "AddAnImage": "Add an image",
+    "PersonCard": "Person Card",
+    "TrainingMode": "Training mode",
+    "FullListMode": "FullListMode",
+    "MistakesMode": "Play with mistakes",
+    "CustomMode": "Custom number mode",
+    "Of": "of",
+    "FinalScore": "Final Score",
+    "ResetQuiz": "Reset Quiz",
+    "Home": "Home",
+    "NormalGameScore": "Normal game score !"
+
+
+
+}

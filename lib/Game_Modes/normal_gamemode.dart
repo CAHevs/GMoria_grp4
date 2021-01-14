@@ -10,10 +10,9 @@ import '../selection_mode.dart';
 var finalScore = 0;
 var questionNumber = 0;
 var users;
-bool _trueAnswerStatus = false;
-bool _wrongAnswerStatus = false;
-int _start = 5;
-int _current = 5;
+bool _nameStatus = false;
+bool _displayButtonStatus = true;
+bool _validationButtons = false;
 
 //Method for get all the people of a list
 Future<List<Users>> genCode(id) async {
@@ -36,17 +35,21 @@ Future<List<Users>> getAllUsersFromAList(id) async {
       for (var i = 1; i < array.length; i++) {
         if (array[i] == ',' || array[i] == ']') {
           if (id == array.substring(i - 20, i)) {
-            list.add(new Users(document.id, document.data()["firstname"],
-                document.data()["lastname"], document.data()["image"], document.data()["note"]));
+            list.add(new Users(
+                document.id,
+                document.data()["firstname"],
+                document.data()["lastname"],
+                document.data()["image"],
+                document.data()["note"]));
           }
         }
       }
     });
   });
 
-    //We shuffle the list
-  list = shuffle(list);
-
+  //We shuffle the list
+  //list = shuffle(list, list.length);
+  
   return list;
 }
 
@@ -59,7 +62,16 @@ Future<void> updateMistakeStatus(personId) async {
       .update({'mistake': true});
 }
 
-Future<void> updateScore(list,score) async {
+Future<void> updateRightAnswerStatus(personId) async {
+  return FirebaseFirestore.instance
+      .collection(FirebaseAuth.instance.currentUser.email)
+      .doc('users')
+      .collection('users')
+      .doc(personId)
+      .update({'mistake': false});
+}
+
+Future<void> updateScore(list, score) async {
   return FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser.email)
       .doc(list)
@@ -67,21 +79,21 @@ Future<void> updateScore(list,score) async {
 }
 
 //If the user does a mistake, it's set in the DB
-List<Users> shuffle(List<Users> items) {
+List<Users> shuffle(List<Users> items, int end) {
   var random = new Random();
+  int start = 0;
 
-//Method for shuffle list of users
-  for (var i = items.length - 1; i > 0; i--) {
-    // Pick a user number according to the list length
-    var n = random.nextInt(i + 1);
-
-    var temp = items[i];
-    items[i] = items[n];
-    items[n] = temp;
+  end ??= items.length;
+  var length = end - start;
+  while (length > 1) {
+    var pos = random.nextInt(length);
+    length--;
+    var tmp1 = items[start + pos];
+    items[start + pos] = items[start + length];
+    items[start + length] = tmp1;
   }
-
-  return items;
 }
+
 //Main class for the CustomNumberGamemode
 class NormalGameMode extends StatefulWidget {
   final String id;
@@ -94,12 +106,12 @@ class NormalGameMode extends StatefulWidget {
     return new NormalGamemodeState(id, this.listName);
   }
 }
+
 //State class for all the state of game pages
 class NormalGamemodeState extends State<NormalGameMode> {
   String id;
   String listName;
   var personName;
-  var _controller = TextEditingController();
 
   NormalGamemodeState(this.id, this.listName);
 
@@ -110,6 +122,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
       builder: (BuildContext context, AsyncSnapshot<List<Users>> snapshot) {
         if (snapshot.hasData && snapshot.data.length > 0) {
           final Users user = snapshot.data[questionNumber];
+          print(user.firstname+" "+user.lastname);
           return Scaffold(
               appBar: AppBar(
                 automaticallyImplyLeading: false,
@@ -118,14 +131,14 @@ class NormalGamemodeState extends State<NormalGameMode> {
                   Padding(
                       padding: EdgeInsets.only(right: 20.0),
                       child: GestureDetector(
-                        //Button for leave the game
+                          //Button for leave the game
                           onTap: () {
                             leave();
                           },
                           child: Icon(
-                        Icons.close,
-                        size: 35.0,
-                      )))
+                            Icons.close,
+                            size: 35.0,
+                          )))
                 ],
               ),
               resizeToAvoidBottomInset: false,
@@ -140,6 +153,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
                         children: <Widget>[
                           new Padding(padding: EdgeInsets.all(5.0)),
 
+                          //Question number with score
                           new Container(
                             alignment: Alignment.centerRight,
                             child: new Row(
@@ -157,19 +171,6 @@ class NormalGamemodeState extends State<NormalGameMode> {
                             ),
                           ),
 
-                          new Padding(padding: EdgeInsets.all(10.0)),
-                          //Counter before next question
-                          new Visibility(
-                              visible: _trueAnswerStatus,
-                              child: Text('Next question in $_current',
-                                  style: TextStyle(fontSize: 20.0))),
-                          new Visibility(
-                              visible: _wrongAnswerStatus,
-                              child: Text('Next question in $_current',
-                                  style: TextStyle(fontSize: 20.0))),
-
-                          new Padding(padding: EdgeInsets.all(5.0)),
-
                           //Image
                           new ClipRRect(
                             borderRadius: BorderRadius.circular(20),
@@ -182,96 +183,87 @@ class NormalGamemodeState extends State<NormalGameMode> {
 
                           new Padding(padding: EdgeInsets.all(20.0)),
 
-                          //Input for the name
+                          //Name display button
 
-                          new Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: 300.0,
-                                        child: new TextField(
-                                          controller: _controller,
-                                          onChanged: (value) {
-                                            personName = value;
-                                          },
-                                          keyboardType: TextInputType.multiline,
-                                          maxLines: 1,
-                                          decoration: new InputDecoration(
-                                              border: new OutlineInputBorder(
-                                                  borderSide: new BorderSide(
-                                                      color: Colors.grey)),
-                                              hintText: 'Enter the person name',
-                                              labelText: 'Firstname Lastname'),
-                                        ))
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    new FloatingActionButton(
-                                      onPressed: () {
-                                        if (personName == null ||
-                                            personName.isEmpty) {
-                                          _emptyTextfield();
-                                        } else {
-                                          //If the personName is null, there is an alert
-                                          if (personName ==
-                                              user.firstname +
-                                                  ' ' +
-                                                  user.lastname) {
-                                                    //If correct answer, we increase the score and change question
-                                          //We also show a green circle for saying that is correct
-                                            debugPrint("Correct");
-                                            finalScore++;
-                                            setState(() {
-                                              _trueAnswerStatus = true;
-                                            });
-                                            updateQuestion(snapshot.data, snapshot.data.length);
-                                          } else {
-                                            //If correct answer, we set the mistake in DB and change question
-                                            //We also show a red circle with the right name for saying that is false
-                                            updateMistakeStatus(user.id);
-                                            debugPrint("Wrong");
-                                            setState(() {
-                                              _wrongAnswerStatus = true;
-                                            });
-                                            updateQuestion(snapshot.data, snapshot.data.length);
-                                          }
-                                          //We clear the textfield
-                                          _controller.clear();
-                                        }
-                                      },
-                                      child: Icon(Icons.play_arrow),
-                                    )
-                                  ],
-                                ),
-                              ]),
+                          new Visibility(
+                              visible: _nameStatus,
+                              child: new Text(
+                                user.firstname + " " + user.lastname,
+                                style: new TextStyle(fontSize: 25.0),
+                              )),
+
+                          //Name shown
+                          new Visibility(
+                              visible: _displayButtonStatus,
+                              child: new Container(
+                                  height: 100.0,
+                                  width: 100.0,
+                                  child: new FloatingActionButton(
+                                    heroTag: null,
+                                    onPressed: () {
+                                      setState(() {
+                                        _nameStatus = true;
+                                        _displayButtonStatus = false;
+                                        _validationButtons = true;
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 70.0,
+                                    ),
+                                    backgroundColor: Colors.blue,
+                                  ))),
 
                           new Padding(padding: EdgeInsets.all(10.0)),
 
-                          //Show the green circle for correct answer
+
+                          //Validation buttons, one green and one red
                           new Visibility(
-                              visible: _trueAnswerStatus,
-                              child: Icon(Icons.circle,
-                                  color: Colors.green, size: 50.0)),
-                          //Show the red circle with the name for false answer
-                          new Visibility(
-                              visible: _wrongAnswerStatus,
-                              child: new Column(
-                                children: [
-                                  Text(user.firstname + ' ' + user.lastname,
-                                      style: TextStyle(fontSize: 25)),
-                                  Padding(padding: EdgeInsets.all(5.0)),
-                                  Icon(
-                                    Icons.circle,
-                                    color: Colors.red,
-                                    size: 50.0,
-                                  )
-                                ],
-                              ))
+                              visible: _validationButtons,
+                              child: new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        new Container(
+                                            height: 100.0,
+                                            width: 100.0,
+                                            child: new FloatingActionButton(
+                                              heroTag: null,
+                                              onPressed: () {
+                                                updateRightAnswerStatus(user.id);
+                                                finalScore++;
+                                                update(snapshot.data,
+                                                    snapshot.data.length, id);
+                                              },
+                                              child: Icon(Icons.check, size: 70.0),
+                                              backgroundColor: Colors.green,
+                                            ))
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        new Container(
+                                            height: 100.0,
+                                            width: 100.0,
+                                            child: new FloatingActionButton(
+                                              heroTag: null,
+                                              onPressed: () {
+                                                updateMistakeStatus(user.id);
+                                                update(snapshot.data,
+                                                    snapshot.data.length, id);
+                                              },
+                                              child: Icon(Icons.close, size: 70.0),
+                                              backgroundColor: Colors.red,
+                                            ))
+                                      ],
+                                    ),
+                                  ])),
                         ],
                       )),
                 ),
@@ -280,7 +272,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
           //If nobody in the list
           return new Scaffold(
             appBar: AppBar(
-              title: Text('test'),
+              title: Text('Full list gamemode'),
             ),
             body: Text("No one is in this list"),
           );
@@ -289,9 +281,14 @@ class NormalGamemodeState extends State<NormalGameMode> {
     );
   }
 
- 
   //Leave the game
   void leave() {
+    finalScore = 0;
+    questionNumber = 0;
+    _validationButtons = false;
+    _displayButtonStatus = true;
+    _nameStatus = false;
+
     setState(() {
       Navigator.push(
           context,
@@ -300,84 +297,35 @@ class NormalGamemodeState extends State<NormalGameMode> {
     });
   }
 
-  //Method for the counter
-  void startTimer() {
-    CountdownTimer countDownTimer = new CountdownTimer(
-      new Duration(seconds: _start),
-      new Duration(seconds: 1),
-    );
-
-    var sub = countDownTimer.listen(null);
-    sub.onData((duration) {
-      setState(() {
-        _current = _start - duration.elapsed.inSeconds;
-      });
-    });
-
-    sub.onDone(() {
-      print("Done");
-      sub.cancel();
-    });
-  }
-
-//Method for go to next question
-  void updateQuestion(allUsers, total) {
-    //Method for refresh the game IF it's ended
+  //Update the next question or go to the summary screen at the end of the game
+  Future<void> update(allUsers, total, listId) async {
     void refresh() {
       setState(() {
         finalScore = 0;
         questionNumber = 0;
-        _trueAnswerStatus = false;
-        _wrongAnswerStatus = false;
+        _validationButtons = false;
+        _displayButtonStatus = true;
+        _nameStatus = false;
       });
     }
 
-    //Start the counter before go the next question
-    startTimer();
-    //Delay for go to the next question
-    Future.delayed(Duration(seconds: 5), () {
-      setState(() {
-        //If last question, we go to the summary
-        if (questionNumber == allUsers.length - 1) {
-          Navigator.push(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) => new Summary(finalScore, refresh,total)));
-        } else {
-          //if not the last question, we increase the question number and hide green or red circle
-          questionNumber++;
-          _trueAnswerStatus = false;
-          _wrongAnswerStatus = false;
-        }
-      });
+    setState(() {
+      //If last question, we go to the summary
+      if (questionNumber == allUsers.length - 1) {
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new Summary(finalScore, refresh, total, listId)));
+      } else {
+        //if not the last question, we increase the question number and hide green or red circle
+        questionNumber++;
+        _validationButtons = false;
+        _displayButtonStatus = true;
+        _nameStatus = false;
+      }
     });
   }
 
-  //If empty textfield
-  Future<void> _emptyTextfield() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Empty field !'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[Text('The name cannot be empty !')],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Ok !'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
 
 //Result screen with score, retry button and leave button
@@ -385,10 +333,9 @@ class Summary extends StatelessWidget {
   final int score;
   final Function refresh;
   final int total;
-  Summary(this.score, this.refresh, this.total);
-
-
-  
+  final String listId;
+  double percentage;
+  Summary(this.score, this.refresh, this.total, this.listId);
 
   @override
   Widget build(BuildContext context) {
@@ -413,6 +360,8 @@ class Summary extends StatelessWidget {
                 new MaterialButton(
                     color: Colors.red,
                     onPressed: () {
+                      percentage = (score / total) * 100;
+                      updateScore(listId, percentage.truncate());
                       refresh();
                       Navigator.pop(context);
                     },
@@ -425,8 +374,10 @@ class Summary extends StatelessWidget {
                 new MaterialButton(
                     color: Colors.blue[400],
                     onPressed: () {
-                     //Leave the game and update the score
-                      updateScore("", (score / total) * 100);
+                      //Leave the game and update the score
+                      percentage = (score / total) * 100;
+                      updateScore(listId, percentage.truncate());
+                      refresh();
                       Navigator.push(
                           context,
                           new MaterialPageRoute(

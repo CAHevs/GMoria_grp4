@@ -5,6 +5,9 @@ import 'package:gmoria_grp4/Setup/loading.dart';
 import 'package:gmoria_grp4/Setup/signIn.dart';
 import 'package:gmoria_grp4/Setup/somethingWentWrong.dart';
 import 'package:gmoria_grp4/lists.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'app_localizations.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +22,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = 'GMoria Group 4';
-
     return FutureBuilder(
       //Initialize FlutterFire
       future: _initialization,
@@ -42,7 +44,27 @@ class MyApp extends StatelessWidget {
                 home: Scaffold(
                   body: LoginPage(),
                   //go to the login page
-                ));
+                ),
+                supportedLocales: [
+                  Locale('en', 'US'),
+                  Locale('fr', 'FR')
+                ],
+                localizationsDelegates: [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                localeResolutionCallback: (locale, supportedLocales){
+
+                  for(var supportedLocale in supportedLocales){
+                    if(supportedLocale.languageCode == locale.languageCode &&
+                    supportedLocale.countryCode == locale.countryCode){
+                      return supportedLocale;
+                    }
+                  }
+                  return supportedLocales.first;
+                }
+                );
           } else {
             //if this is a user in the cache, go to the list page(a user is logged)
             return MaterialApp(
@@ -54,7 +76,28 @@ class MyApp extends StatelessWidget {
                 home: Scaffold(
                   body:
                       ListsPage(), //go to the list page and give the user loged in
-                ));
+                ),
+                supportedLocales: [
+                  Locale('en', 'US'),
+                  Locale('fr', 'FR')
+                ],
+                localizationsDelegates: [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                localeResolutionCallback: (locale, supportedLocales){
+
+                  for(var supportedLocale in supportedLocales){
+                    if(supportedLocale.languageCode == locale.languageCode &&
+                    supportedLocale.countryCode == locale.countryCode){
+                      return supportedLocale;
+                    }
+                  }
+                  return supportedLocales.first;
+                },
+              );
           }
         }
 

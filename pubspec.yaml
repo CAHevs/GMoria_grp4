@@ -31,6 +31,9 @@ dependencies:
   image_picker: ^0.6.7+8
   path_provider: ^1.6.14
   path: ^1.7.0
+  easy_localization: ^2.0.0+1
+  flutter_localizations:
+    sdk: flutter  
   flutter_slidable:
 
 
@@ -61,7 +64,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-     - images/profil.png
+    - images/en.json
+    - images/fr.json
+    - images/profil.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
