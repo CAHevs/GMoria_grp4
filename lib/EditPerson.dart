@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/list_person.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
@@ -63,10 +64,10 @@ class _editPerson extends State<EditPerson> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (firstname == null || firstname.isEmpty) {
-            print("The firstname can not be empty !");
+            print(AppLocalizations.of(context).translate("FirstnameNotEmpty"));
           }
           if (lastname == null || lastname.isEmpty) {
-            print("The lastname can not be empty !");
+            print(AppLocalizations.of(context).translate("LastnameNotEmpty"));
           }
           editList();
           Navigator.push(
@@ -99,8 +100,8 @@ class _editPerson extends State<EditPerson> {
                     decoration: new InputDecoration(
                         border: new OutlineInputBorder(
                             borderSide: new BorderSide(color: Colors.grey)),
-                        hintText: 'firstname',
-                        labelText: 'firstname'),
+                        hintText: AppLocalizations.of(context).translate("Firstname"),
+                        labelText: AppLocalizations.of(context).translate("Firstname")),
                   )),
               Container(
                   width: 300,
@@ -116,14 +117,14 @@ class _editPerson extends State<EditPerson> {
                     decoration: new InputDecoration(
                         border: new OutlineInputBorder(
                             borderSide: new BorderSide(color: Colors.grey)),
-                        hintText: 'lastname',
-                        labelText: 'lastname'),
+                        hintText: AppLocalizations.of(context).translate("Lastname"),
+                        labelText: AppLocalizations.of(context).translate("Lastname")),
                   )),
               Container(
                   width: 300,
                   margin: new EdgeInsets.symmetric(vertical: 20.0),
                   child: TextButton(
-                    child: Text("Modify image"),
+                    child: Text(AppLocalizations.of(context).translate("ModifyImage")),
                     onPressed: () {
                       getImage();
                     },

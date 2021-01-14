@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 
 //display something when the page is loading
 class Loading extends StatelessWidget {
@@ -10,9 +11,9 @@ class Loading extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Loading"),
+          title: Text(AppLocalizations.of(context).translate("Loading")),
         ),
-        body: Text("Loading, please wait"),
+        body: Text(AppLocalizations.of(context).translate("WaitLoading")),
       ),
     );
   }

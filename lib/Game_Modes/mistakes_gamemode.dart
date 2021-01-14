@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:quiver/async.dart';
 import '../lists.dart';
 import '../selection_mode.dart';
@@ -52,7 +53,7 @@ Future<List<Users>> getAllUsersWithMistakesFromAList(id) async {
   });
 
   //We shuffle the list
-  list = shuffle(list);
+  //list = shuffle(list);
 
   return list;
 }
@@ -333,7 +334,7 @@ class MistakesGamemodeState extends State<MistakesGameMode> {
 
 //Result screen with score, retry button and leave button
 class Summary extends StatelessWidget {
-  final int score;
+final int score;
   final Function refresh;
   final int total;
   final String listId;
@@ -347,14 +348,14 @@ class Summary extends StatelessWidget {
       child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text("Normal game score !"),
+            title: Text(AppLocalizations.of(context).translate("FinalScore")),
           ),
           body: new Center(
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 new Text(
-                  "Final Score: $score",
+                  AppLocalizations.of(context).translate("FinalScore")+": $score",
                   style: new TextStyle(fontSize: 40.0),
                 ),
                 new Padding(
@@ -368,7 +369,7 @@ class Summary extends StatelessWidget {
                       refresh();
                       Navigator.pop(context);
                     },
-                    child: new Text("Reset Quiz",
+                    child: new Text(AppLocalizations.of(context).translate("ResetQuiz"),
                         style: new TextStyle(
                             fontSize: 40.0, color: Colors.white))),
                 new Padding(
@@ -386,7 +387,7 @@ class Summary extends StatelessWidget {
                           new MaterialPageRoute(
                               builder: (context) => new ListsPage()));
                     },
-                    child: new Text("Home",
+                    child: new Text(AppLocalizations.of(context).translate("Home"),
                         style:
                             new TextStyle(fontSize: 40.0, color: Colors.white)))
               ],

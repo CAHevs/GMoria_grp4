@@ -112,7 +112,6 @@ class MainPageItem implements ListItem {
   final String id;
   final String name;
   final int score;
-  final String scoreHeading = 'Last score';
 
   //MainPageItem(this.id, this.heading);
   MainPageItem(this.id, this.name, this.score);
@@ -147,7 +146,7 @@ class MainPageItem implements ListItem {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    scoreHeading,
+                    AppLocalizations.of(context).translate('lastScore'),
                     style: TextStyle(fontSize: 25.0, color: Colors.black87),
                   ),
                   Text(

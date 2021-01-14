@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/lists.dart';
 
 
@@ -8,7 +9,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: Text(AppLocalizations.of(context).translate('settings')),
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back), 
           onPressed: () {
@@ -28,7 +29,7 @@ class SettingsPage extends StatelessWidget {
                     onPressed: () {
                       //Method to delete Account
                     },
-                    child: new Text("Delete account",
+                    child: new Text(AppLocalizations.of(context).translate('deleteAccount'),
                         style: new TextStyle(
                             fontSize: 25.0, color: Colors.white))),
                 new Padding(

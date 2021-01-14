@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/EditPerson.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/lists.dart';
 import 'package:gmoria_grp4/person_card.dart';
 
@@ -74,7 +75,7 @@ class ListPerson extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => ListsPage()));
                   }),
             ),
-            body: Text("No one is in this list"),
+            body: Text(AppLocalizations.of(context).translate("NoPersonInList")),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 Navigator.push(
@@ -209,7 +210,7 @@ class PersonList implements ListItem {
       ]),
       secondaryActions: <Widget>[
         IconSlideAction(
-          caption: 'Delete',
+          caption: AppLocalizations.of(context).translate("Delete"),
           color: Colors.red,
           icon: Icons.delete,
           onTap: () => deletePerson(),

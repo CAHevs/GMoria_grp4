@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gmoria_grp4/Setup/signup.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/lists.dart';
 import 'dart:developer';
 
@@ -13,6 +14,7 @@ class LoginPage extends StatefulWidget {
 //the state of the login form
 class _LoginPageState extends State<LoginPage> {
   String _email, _password;
+  
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   //display a form with an email and a password field and the methods for check the form
@@ -20,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
     log('User: ${FirebaseAuth.instance.currentUser}');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign in'),
+        title: new Text(AppLocalizations.of(context).translate('SignIn')),
       ),
       body: Form(
         key: _formKey,
@@ -30,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
               // ignore: missing_return
               validator: (input) {
                 if (input.isEmpty) {
-                  return 'Please type an email';
+                  return AppLocalizations.of(context).translate('NoEmail');
                 }
               },
               onSaved: (input) => _email = input,
@@ -40,25 +42,25 @@ class _LoginPageState extends State<LoginPage> {
               // ignore: missing_return
               validator: (input) {
                 if (input.isEmpty) {
-                  return 'Please provide a password';
+                  return AppLocalizations.of(context).translate('NoPassword');
                 }
                 if (input.length < 8) {
-                  return 'Your password needs to be at least 8 characters';
+                  return AppLocalizations.of(context).translate('PasswordNeeded');
                 }
               },
               onSaved: (input) => _password = input,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('Password')),
               obscureText: true,
             ),
             //the signin button
             RaisedButton(
               onPressed: signIn,
-              child: Text('Sign in'),
+              child: Text(AppLocalizations.of(context).translate('SignIn')),
             ),
             //the signup button
             RaisedButton(
               onPressed: navigateToSignUp,
-              child: Text('Sign up'),
+              child: Text(AppLocalizations.of(context).translate('SignUp')),
             )
           ],
         ),
