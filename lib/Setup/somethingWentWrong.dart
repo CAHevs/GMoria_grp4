@@ -12,7 +12,7 @@ class SomethingWentWrong extends StatelessWidget {
         appBar: AppBar(
           title: Text("Error"),
         ),
-        body: Text("An error has occured"),
+        body: Center(child: Text("An error has occured")),
       ),
     );
   }

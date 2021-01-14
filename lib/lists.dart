@@ -224,8 +224,42 @@ class MainPageItem implements ListItem {
           caption: 'Delete',
           color: Colors.red,
           icon: Icons.delete,
-          onTap: () => deleteList(),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) => _buildPopupDialog(context),
+            );
+          },
         )
+      ],
+    );
+  }
+
+  Widget _buildPopupDialog(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Are you sure you want to delete this list ?'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("This action is irreversible"),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            deleteList();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Yes, delete'),
+        ),
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('No'),
+        ),
       ],
     );
   }
