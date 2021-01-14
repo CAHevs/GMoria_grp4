@@ -216,41 +216,6 @@ class MainPageItem implements ListItem {
               ],
             )
           ])),
-          Container(
-              child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppLocalizations.of(context).translate('lastScore'),
-                    style: TextStyle(fontSize: 25.0, color: Colors.black87),
-                  ),
-                  Text(
-                    "$score" + "%",
-                    style: TextStyle(fontSize: 20.0, color: Colors.black54),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  IconButton(
-                      icon: Icon(Icons.play_circle_outline),
-                      disabledColor: Colors.red,
-                      iconSize: 45,
-                      //go to the selection mode page
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SelectionModPage(id, name)),
-                        );
-                      })
-                ],
-              )
-            ],
-          ))
         ]),
         
       secondaryActions: <Widget>[
