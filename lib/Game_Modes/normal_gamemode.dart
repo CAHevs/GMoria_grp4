@@ -48,8 +48,8 @@ Future<List<Users>> getAllUsersFromAList(id) async {
   });
 
   //We shuffle the list
-  list = shuffle(list);
-
+  //list = shuffle(list, list.length);
+  
   return list;
 }
 
@@ -59,7 +59,7 @@ Future<void> updateMistakeStatus(personId) async {
       .doc('users')
       .collection('users')
       .doc(personId)
-      .update({'mistake': false});
+      .update({'mistake': true});
 }
 
 Future<void> updateRightAnswerStatus(personId) async {
@@ -68,7 +68,7 @@ Future<void> updateRightAnswerStatus(personId) async {
       .doc('users')
       .collection('users')
       .doc(personId)
-      .update({'mistake': true});
+      .update({'mistake': false});
 }
 
 Future<void> updateScore(list, score) async {
@@ -79,20 +79,19 @@ Future<void> updateScore(list, score) async {
 }
 
 //If the user does a mistake, it's set in the DB
-List<Users> shuffle(List<Users> items) {
+List<Users> shuffle(List<Users> items, int end) {
   var random = new Random();
+  int start = 0;
 
-//Method for shuffle list of users
-  for (var i = items.length - 1; i > 0; i--) {
-    // Pick a user number according to the list length
-    var n = random.nextInt(i + 1);
-
-    var temp = items[i];
-    items[i] = items[n];
-    items[n] = temp;
+  end ??= items.length;
+  var length = end - start;
+  while (length > 1) {
+    var pos = random.nextInt(length);
+    length--;
+    var tmp1 = items[start + pos];
+    items[start + pos] = items[start + length];
+    items[start + length] = tmp1;
   }
-
-  return items;
 }
 
 //Main class for the CustomNumberGamemode
@@ -113,7 +112,6 @@ class NormalGamemodeState extends State<NormalGameMode> {
   String id;
   String listName;
   var personName;
-  var _controller = TextEditingController();
 
   NormalGamemodeState(this.id, this.listName);
 
@@ -124,6 +122,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
       builder: (BuildContext context, AsyncSnapshot<List<Users>> snapshot) {
         if (snapshot.hasData && snapshot.data.length > 0) {
           final Users user = snapshot.data[questionNumber];
+          print(user.firstname+" "+user.lastname);
           return Scaffold(
               appBar: AppBar(
                 automaticallyImplyLeading: false,
@@ -235,10 +234,10 @@ class NormalGamemodeState extends State<NormalGameMode> {
                                             child: new FloatingActionButton(
                                               heroTag: null,
                                               onPressed: () {
-                                                //updateRightAnswerStatus(user.id);
+                                                updateRightAnswerStatus(user.id);
                                                 finalScore++;
                                                 update(snapshot.data,
-                                                    snapshot.data.length);
+                                                    snapshot.data.length, id);
                                               },
                                               child: Icon(Icons.check, size: 70.0),
                                               backgroundColor: Colors.green,
@@ -255,9 +254,9 @@ class NormalGamemodeState extends State<NormalGameMode> {
                                             child: new FloatingActionButton(
                                               heroTag: null,
                                               onPressed: () {
-                                                //updateMistakeStatus(user.id);
+                                                updateMistakeStatus(user.id);
                                                 update(snapshot.data,
-                                                    snapshot.data.length);
+                                                    snapshot.data.length, id);
                                               },
                                               child: Icon(Icons.close, size: 70.0),
                                               backgroundColor: Colors.red,
@@ -273,7 +272,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
           //If nobody in the list
           return new Scaffold(
             appBar: AppBar(
-              title: Text('test'),
+              title: Text('Full list gamemode'),
             ),
             body: Text("No one is in this list"),
           );
@@ -299,7 +298,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
   }
 
   //Update the next question or go to the summary screen at the end of the game
-  Future<void> update(allUsers, total) async {
+  Future<void> update(allUsers, total, listId) async {
     void refresh() {
       setState(() {
         finalScore = 0;
@@ -316,7 +315,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
         Navigator.push(
             context,
             new MaterialPageRoute(
-                builder: (context) => new Summary(finalScore, refresh, total)));
+                builder: (context) => new Summary(finalScore, refresh, total, listId)));
       } else {
         //if not the last question, we increase the question number and hide green or red circle
         questionNumber++;
@@ -327,31 +326,6 @@ class NormalGamemodeState extends State<NormalGameMode> {
     });
   }
 
-  //If empty textfield
-  Future<void> _emptyTextfield() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Empty field !'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[Text('The name cannot be empty !')],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Ok !'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
 
 //Result screen with score, retry button and leave button
@@ -359,7 +333,9 @@ class Summary extends StatelessWidget {
   final int score;
   final Function refresh;
   final int total;
-  Summary(this.score, this.refresh, this.total);
+  final String listId;
+  double percentage;
+  Summary(this.score, this.refresh, this.total, this.listId);
 
   @override
   Widget build(BuildContext context) {
@@ -384,6 +360,8 @@ class Summary extends StatelessWidget {
                 new MaterialButton(
                     color: Colors.red,
                     onPressed: () {
+                      percentage = (score / total) * 100;
+                      updateScore(listId, percentage.truncate());
                       refresh();
                       Navigator.pop(context);
                     },
@@ -397,7 +375,8 @@ class Summary extends StatelessWidget {
                     color: Colors.blue[400],
                     onPressed: () {
                       //Leave the game and update the score
-                      updateScore("", (score / total) * 100);
+                      percentage = (score / total) * 100;
+                      updateScore(listId, percentage.truncate());
                       refresh();
                       Navigator.push(
                           context,

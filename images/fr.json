@@ -1,0 +1,25 @@
+{
+    "settings": "Paramètres",
+    "deleteAccount": "Supprimer le compte",
+    "lastScore": "Dernier score",
+    "AddNewList": "Ajouter une nouvelle liste",
+    "NewList": "Nouvelle liste",
+    "AddPerson": "Ajouter une personne",
+    "AddExistingUser": "Ajouter une personne existante",
+    "Firstname": "prénom",
+    "Lastname": "nom",
+    "AddAnImage": "Ajouter une image",
+    "PersonCard": "Carte personnelle",
+    "TrainingMode": "Mode d'entrainement",
+    "FullListMode": "Jeu complet",
+    "MistakesMode": "Jeu avec les fautes",
+    "CustomMode": "Jeu variable",
+    "Of": "sur",
+    "FinalScore": "Score final",
+    "ResetQuiz": "Relancer",
+    "Home": "Accueil",
+    "NormalGameScore": "Page de score !"
+
+
+
+}

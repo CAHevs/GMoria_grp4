@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Setup/loading.dart';
 import 'package:gmoria_grp4/add_list.dart';
 import 'package:gmoria_grp4/Objects/listsObject.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/list_person.dart';
 import 'package:gmoria_grp4/selection_mode.dart';
 import 'package:gmoria_grp4/settings.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class ListsPage extends StatefulWidget {
   @override
@@ -41,7 +44,7 @@ class _Lists extends State<ListsPage> {
                         accountEmail: new Text(firestoreUser.email,
                             style: TextStyle(fontSize: 18.0))),
                     new ListTile(
-                        title: new Text('Settings'),
+                        title: new Text(AppLocalizations.of(context).translate('settings')),
                         onTap: () {
                           Navigator.push(
                             context,
@@ -75,7 +78,8 @@ class _Lists extends State<ListsPage> {
           }
 
           return Scaffold(body: body);
-        });
+        })
+    ;
   }
 
   //Method for get all the lists for the auth user
