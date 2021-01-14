@@ -75,7 +75,9 @@ class ListPerson extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => ListsPage()));
                   }),
             ),
-            body: Text(AppLocalizations.of(context).translate("NoPersonInList")),
+            body: Center(
+              child: Text(AppLocalizations.of(context).translate("NoPersonInList")),
+            ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 Navigator.push(
@@ -196,7 +198,8 @@ class PersonList implements ListItem {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PersonCard(person, listId, listName)),
+              MaterialPageRoute(
+                  builder: (context) => PersonCard(person, listId, listName)),
             );
           },
           onLongPress: () {
@@ -245,7 +248,7 @@ class PersonList implements ListItem {
             'lists': finalListPerson,
           })
           .then((value) => print("User deleted"))
-          .catchError((error) => print("Failed to modify person: $error"));
+          .catchError((error) => print("Failed to delete person: $error"));
     } else {
       FirebaseFirestore.instance
           .collection(FirebaseAuth.instance.currentUser.email)
@@ -254,12 +257,10 @@ class PersonList implements ListItem {
           .doc(person.id)
           .delete()
           .then((value) => print("User deleted"))
-          .catchError((error) => print("Failed to modify person: $error"));
+          .catchError((error) => print("Failed to delete person: $error"));
     }
 
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => ListPerson(listId, listName)));
-
-
   }
 }
