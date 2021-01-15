@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
 import 'package:gmoria_grp4/Setup/loading.dart';
+import 'package:gmoria_grp4/Setup/signIn.dart';
 import 'package:gmoria_grp4/add_list.dart';
 import 'package:gmoria_grp4/Objects/listsObject.dart';
 import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/list_person.dart';
 import 'package:gmoria_grp4/selection_mode.dart';
 import 'package:gmoria_grp4/settings.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class ListsPage extends StatefulWidget {
@@ -34,7 +34,7 @@ class _Lists extends State<ListsPage> {
           if (snapshot.hasData && snapshot.data.length > 0) {
             return Scaffold(
               appBar: AppBar(
-                title: Text("GMoria"),
+                title: Text(AppLocalizations.of(context).translate("ListTitle")),
               ),
               //Drawer with the settings and the button to delete account
               drawer: new Drawer(
@@ -53,6 +53,14 @@ class _Lists extends State<ListsPage> {
                             MaterialPageRoute(
                                 builder: (context) => SettingsPage()),
                           );
+                        }),
+                    new ListTile(
+                        title: new Text(
+                            AppLocalizations.of(context).translate('Logout')),
+                        onTap: () async{
+                          await FirebaseAuth.instance.signOut();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
                         })
                   ],
                 ),
@@ -80,7 +88,7 @@ class _Lists extends State<ListsPage> {
           } else {
             return new Scaffold(
               appBar: AppBar(
-                title: Text("GMoria"),
+                title: Text(AppLocalizations.of(context).translate("ListTitle")),
               ),
               drawer: new Drawer(
                 child: ListView(
@@ -103,7 +111,7 @@ class _Lists extends State<ListsPage> {
               ),
               body: Center(
                   child: Center(
-                child: Text("You have currently no lists"),
+                child: Text(AppLocalizations.of(context).translate("NoList")),
               )),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
@@ -236,12 +244,12 @@ class MainPageItem implements ListItem {
 
   Widget _buildPopupDialog(BuildContext context) {
     return new AlertDialog(
-      title: const Text('Are you sure you want to delete this list ?'),
+      title: new Text(AppLocalizations.of(context).translate('DeleteList')),
       content: new Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("This action is irreversible"),
+          Text(AppLocalizations.of(context).translate('Irreversible')),
         ],
       ),
       actions: <Widget>[
@@ -250,14 +258,14 @@ class MainPageItem implements ListItem {
             deleteList();
           },
           textColor: Theme.of(context).primaryColor,
-          child: const Text('Yes, delete'),
+          child: new Text(AppLocalizations.of(context).translate('Yes')),
         ),
         new FlatButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           textColor: Theme.of(context).primaryColor,
-          child: const Text('No'),
+          child: new Text(AppLocalizations.of(context).translate('No')),
         ),
       ],
     );

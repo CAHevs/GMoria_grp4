@@ -22,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
     log('User: ${FirebaseAuth.instance.currentUser}');
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: new Text(AppLocalizations.of(context).translate('SignIn')),
       ),
       body: Form(

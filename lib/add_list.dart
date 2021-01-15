@@ -65,6 +65,7 @@ class AddList extends StatelessWidget {
   Future<void> addNewList(){
     return userEmail.add({
       'name': newListName,
+      'score': 0,
     }).then((value) => print("List added"))
     .catchError((error) => print("Failed to add list: $error"));
   }

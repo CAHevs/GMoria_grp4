@@ -48,9 +48,6 @@ Future<List<Users>> getAllUsersFromAList(id) async {
     });
   });
 
-  //We shuffle the list
-  //list = shuffle(list, list.length);
-  //list.shuffle();
   return list;
 }
 
@@ -79,21 +76,6 @@ Future<void> updateScore(list, score) async {
       .update({'score': score});
 }
 
-//If the user does a mistake, it's set in the DB
-List<Users> shuffle(List<Users> items, int end) {
-  var random = new Random();
-  int start = 0;
-
-  end ??= items.length;
-  var length = end - start;
-  while (length > 1) {
-    var pos = random.nextInt(length);
-    length--;
-    var tmp1 = items[start + pos];
-    items[start + pos] = items[start + length];
-    items[start + length] = tmp1;
-  }
-}
 
 //Main class for the CustomNumberGamemode
 class NormalGameMode extends StatefulWidget {

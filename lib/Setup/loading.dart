@@ -13,7 +13,7 @@ class Loading extends StatelessWidget {
         appBar: AppBar(
           title: Text(AppLocalizations.of(context).translate("Loading")),
         ),
-        body: Center(child: Text("Loading, please wait")),
+        body: Center(child: Text(AppLocalizations.of(context).translate("WaitLoading"))),
       ),
     );
   }

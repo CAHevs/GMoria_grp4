@@ -16,6 +16,7 @@
     "FullListMode": "Full List Mode",
     "MistakesMode": "Play with mistakes",
     "CustomMode": "Custom number mode",
+    "SelectGameMode": "Select game mode",
     "Of": "of",
     "FinalScore": "Final Score",
     "ResetQuiz": "Reset Quiz",
@@ -36,8 +37,15 @@
     "MatchPwd": "The passwords must match",
     "ConfimPassword": "Confim password",
     "Loading": "Loading",
-    "WaitLoading": "Loading, please wait"
-
+    "WaitLoading": "Loading, please wait",
+    "ListTitle": "My lists",
+    "NoList": "You currently have no list",
+    "DeleteList": "Are you sure you want to delete this list ?",
+    "Irreversible": "This action is irreversible",
+    "Yes": "Yes, delete",
+    "No": "No",
+    "Logout": "Logout",
+    "SearchHint": "Enter a firstname or name"
 
 
 }

@@ -50,7 +50,7 @@ class _editPerson extends State<EditPerson> {
     return Scaffold(
       appBar: AppBar(
         title:
-            Text("Edit ${personToModify.firstname} ${personToModify.lastname}"),
+            Text(AppLocalizations.of(context).translate("Edit")+" ${personToModify.firstname} ${personToModify.lastname}"),
         leading: new IconButton(
             icon: new Icon(Icons.arrow_back),
             onPressed: () {

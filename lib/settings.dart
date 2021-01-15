@@ -43,18 +43,6 @@ class SettingsPage extends StatelessWidget {
             new Padding(
               padding: EdgeInsets.all(0.0),
             ),
-            new MaterialButton(
-                color: Colors.blue,
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginPage()));
-                },
-                child: new Text("Logout",
-                    style: new TextStyle(fontSize: 25.0, color: Colors.white))),
-            new Padding(
-              padding: EdgeInsets.all(30.0),
-            ),
           ],
         )),
       ),

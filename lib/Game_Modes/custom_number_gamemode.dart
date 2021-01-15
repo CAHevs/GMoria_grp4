@@ -50,8 +50,6 @@ Future<List<Users>> getAllUsersFromAList(id, number) async {
     });
   });
 
-  //We shuffle the list for not have the same order permanently
-  list = shuffle(list);
 
   //If the number entered by the user is less than the people max, we automatically set it to the max value
   if (numericNumber > list.length) {
@@ -94,21 +92,6 @@ Future<void> updateScore(list, score) async {
       .update({'score': score});
 }
 
-//Method for shuffle list of users
-List<Users> shuffle(List<Users> items) {
-  var random = new Random();
-
-  for (var i = items.length - 1; i > 0; i--) {
-    // Pick a user number according to the list length
-    var n = random.nextInt(i + 1);
-
-    var temp = items[i];
-    items[i] = items[n];
-    items[n] = temp;
-  }
-
-  return items;
-}
 
 //Main class for the CustomNumberGamemode
 class CustomNumberGameMode extends StatefulWidget {
@@ -143,7 +126,7 @@ class CustomNumberGamemodeState extends State<CustomNumberGameMode> {
           return Scaffold(
               appBar: AppBar(
                 automaticallyImplyLeading: false,
-                title: Text('Custom gamemode'),
+                title: Text(AppLocalizations.of(context).translate("CustomMode")),
                 actions: <Widget>[
                   Padding(
                       padding: EdgeInsets.only(right: 20.0),
@@ -177,7 +160,7 @@ class CustomNumberGamemodeState extends State<CustomNumberGameMode> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 new Text(
-                                  "Question ${questionNumber + 1} of ${snapshot.data.length}",
+                                  "Question ${questionNumber + 1} / ${snapshot.data.length}",
                                   style: new TextStyle(fontSize: 22.0),
                                 ),
                                 new Text(

@@ -14,7 +14,8 @@ var users;
 bool _nameStatus = false;
 bool _displayButtonStatus = true;
 bool _validationButtons = false;
-
+List<Users> rightAnswers = new List<Users>();
+List<Users> falseAnswers = new List<Users>();
 
 //Method for get all the people of a list
 Future<List<Users>> genCode(id) async {
@@ -23,9 +24,8 @@ Future<List<Users>> genCode(id) async {
 
 //Method for get all the people of a list
 Future<List<Users>> getAllUsersWithMistakesFromAList(id) async {
-  List<Users> list = new List<Users>();
   var firstname, lastname, image;
-
+List<Users> list = new List<Users>();
   Query query = FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser.email)
       .doc("users")
@@ -38,24 +38,36 @@ Future<List<Users>> getAllUsersWithMistakesFromAList(id) async {
         if (array[i] == ',' || array[i] == ']') {
           if (id == array.substring(i - 20, i)) {
             //We get only the people with mistakes
-            if(document.data()["mistake"]==true){
-              list.add(new Users(document.id, 
-                document.data()["firstname"],
-                document.data()["lastname"], 
-                document.data()["image"],
-                document.data()["note"]));
+            if (document.data()["mistake"] == true) {
+              list.add(new Users(
+                  document.id,
+                  document.data()["firstname"],
+                  document.data()["lastname"],
+                  document.data()["image"],
+                  document.data()["note"]));
             }
-            
           }
         }
       }
+
     });
   });
 
-  //We shuffle the list
-  //list = shuffle(list);
 
-  return list;
+  return list;  
+
+}
+
+void udpateStatus() {
+
+  for(var i = 0; i < rightAnswers.length; i++){
+    updateRightAnswerStatus(rightAnswers[i].id);
+  }
+
+  for(var i = 0; i < falseAnswers.length; i++){
+    updateMistakeStatus(falseAnswers[i].id);
+  }
+
 }
 
 Future<void> updateMistakeStatus(personId) async {
@@ -83,22 +95,7 @@ Future<void> updateScore(list, score) async {
       .update({'score': score});
 }
 
-//If the user does a mistake, it's set in the DB
-List<Users> shuffle(List<Users> items) {
-  var random = new Random();
 
- //Method for shuffle list of users
-  for (var i = items.length - 1; i > 0; i--) {
-    // Pick a user number according to the list length
-    var n = random.nextInt(i + 1);
-
-    var temp = items[i];
-    items[i] = items[n];
-    items[n] = temp;
-  }
-
-  return items;
-}
 //Main class for the CustomNumberGamemode
 class MistakesGameMode extends StatefulWidget {
   final String id;
@@ -108,20 +105,24 @@ class MistakesGameMode extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     users = genCode(id);
-    //users = shuffle(users);
     return new MistakesGamemodeState(id, listName);
+
   }
 }
+
 //State class for all the state of game pages
 class MistakesGamemodeState extends State<MistakesGameMode> {
   String id;
   String listName;
   var personName;
+  
 
   MistakesGamemodeState(this.id, this.listName);
 
   @override
   Widget build(BuildContext context) {
+
+    
     return FutureBuilder(
       future: genCode(id),
       builder: (BuildContext context, AsyncSnapshot<List<Users>> snapshot) {
@@ -130,7 +131,7 @@ class MistakesGamemodeState extends State<MistakesGameMode> {
           return Scaffold(
               appBar: AppBar(
                 automaticallyImplyLeading: false,
-                title: Text('Mistakes gamemode'),
+                title: Text(AppLocalizations.of(context).translate("MistakesMode")),
                 actions: <Widget>[
                   Padding(
                       padding: EdgeInsets.only(right: 20.0),
@@ -164,7 +165,7 @@ class MistakesGamemodeState extends State<MistakesGameMode> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 new Text(
-                                  "Question ${questionNumber + 1} of ${snapshot.data.length}",
+                                  "Question ${questionNumber + 1} / ${snapshot.data.length}",
                                   style: new TextStyle(fontSize: 22.0),
                                 ),
                                 new Text(
@@ -238,10 +239,11 @@ class MistakesGamemodeState extends State<MistakesGameMode> {
                                             child: new FloatingActionButton(
                                               heroTag: null,
                                               onPressed: () {
-                                                updateRightAnswerStatus(user.id);
+                                                rightAnswers.add(new Users(user.id, user.firstname, user.lastname, user.image, user.note));
                                                 finalScore++;
                                                 update(snapshot.data,
                                                     snapshot.data.length, id);
+                                                
                                               },
                                               child: Icon(Icons.check, size: 70.0),
                                               backgroundColor: Colors.green,
@@ -258,9 +260,10 @@ class MistakesGamemodeState extends State<MistakesGameMode> {
                                             child: new FloatingActionButton(
                                               heroTag: null,
                                               onPressed: () {
-                                                updateMistakeStatus(user.id);
+                                                falseAnswers.add(new Users(user.id, user.firstname, user.lastname, user.image, user.note));
                                                 update(snapshot.data,
                                                     snapshot.data.length, id);
+                                                
                                               },
                                               child: Icon(Icons.close, size: 70.0),
                                               backgroundColor: Colors.red,
@@ -276,7 +279,7 @@ class MistakesGamemodeState extends State<MistakesGameMode> {
           //If nobody in the list
           return new Scaffold(
             appBar: AppBar(
-              title: Text('Mistakes gamemode'),
+              title: Text(AppLocalizations.of(context).translate("MistakesMode")),
             ),
             body: Text("No one is in this list"),
           );
@@ -303,6 +306,9 @@ class MistakesGamemodeState extends State<MistakesGameMode> {
 
   //Update the next question or go to the summary screen at the end of the game
   Future<void> update(allUsers, total, listId) async {
+
+    print(total);
+
     void refresh() {
       setState(() {
         finalScore = 0;
@@ -319,7 +325,8 @@ class MistakesGamemodeState extends State<MistakesGameMode> {
         Navigator.push(
             context,
             new MaterialPageRoute(
-                builder: (context) => new Summary(finalScore, refresh, total, listId)));
+                builder: (context) =>
+                    new Summary(finalScore, refresh, total, listId)));
       } else {
         //if not the last question, we increase the question number and hide green or red circle
         questionNumber++;
@@ -329,12 +336,11 @@ class MistakesGamemodeState extends State<MistakesGameMode> {
       }
     });
   }
-
 }
 
 //Result screen with score, retry button and leave button
 class Summary extends StatelessWidget {
-final int score;
+  final int score;
   final Function refresh;
   final int total;
   final String listId;
@@ -355,7 +361,8 @@ final int score;
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 new Text(
-                  AppLocalizations.of(context).translate("FinalScore")+": $score",
+                  AppLocalizations.of(context).translate("FinalScore") +
+                      ": $score",
                   style: new TextStyle(fontSize: 40.0),
                 ),
                 new Padding(
@@ -366,10 +373,12 @@ final int score;
                     onPressed: () {
                       percentage = (score / total) * 100;
                       updateScore(listId, percentage.truncate());
+                      udpateStatus();
                       refresh();
                       Navigator.pop(context);
                     },
-                    child: new Text(AppLocalizations.of(context).translate("ResetQuiz"),
+                    child: new Text(
+                        AppLocalizations.of(context).translate("ResetQuiz"),
                         style: new TextStyle(
                             fontSize: 40.0, color: Colors.white))),
                 new Padding(
@@ -381,13 +390,15 @@ final int score;
                       //Leave the game and update the score
                       percentage = (score / total) * 100;
                       updateScore(listId, percentage.truncate());
+                      udpateStatus();
                       refresh();
                       Navigator.push(
                           context,
                           new MaterialPageRoute(
                               builder: (context) => new ListsPage()));
                     },
-                    child: new Text(AppLocalizations.of(context).translate("Home"),
+                    child: new Text(
+                        AppLocalizations.of(context).translate("Home"),
                         style:
                             new TextStyle(fontSize: 40.0, color: Colors.white)))
               ],

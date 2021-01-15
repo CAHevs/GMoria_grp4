@@ -9,19 +9,131 @@ import 'package:gmoria_grp4/Objects/Users.dart';
 import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/lists.dart';
 import 'package:gmoria_grp4/person_card.dart';
-
 import 'AddPersonToList.dart';
-import 'data_search.dart';
 
-//Class containing the list with all person inside a selected list and display them
-class ListPerson extends StatelessWidget {
+class ListPerson extends StatefulWidget {
   final String id;
   final String name;
   ListPerson(this.id, this.name);
 
+  @override
+  State<StatefulWidget> createState() => _ListPersonState(id, name);
+
+}
+
+//Class containing the list with all person inside a selected list and display them
+class _ListPersonState extends State<ListPerson> {
+
+
+
+  TextEditingController _searchController = TextEditingController();
+  final String id;
+  final String name;
+  List _allResults = [];
+  List _resultsList = [];
+  Future resultsLoaded;
+  _ListPersonState(this.id, this.name);
+
+  @override
+  void initState(){
+    super.initState();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose(){
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    resultsLoaded = genCode();
+  }
+
+  _onSearchChanged(){
+    searchResultsList();
+    print(_searchController.text);
+  }
+
+  searchResultsList(){
+    var showResults = [];
+
+    if(_searchController.text != ""){
+
+      for(Users user in _allResults){
+        var firstname = user.firstname.toLowerCase();
+        var lastname = user.lastname.toLowerCase();
+
+        if(firstname.contains(_searchController.text.toLowerCase()) || lastname.contains(_searchController.text.toLowerCase())){
+          showResults.add(user);
+        }
+      }
+
+    } else {
+      showResults = List.from(_allResults);
+    }
+
+    setState(() {
+      _resultsList = showResults;
+    });
+  }
+
   var firestoreInstance = FirebaseFirestore.instance;
   var firestoreUser = FirebaseAuth.instance.currentUser;
+  
+  Widget build(BuildContext context){
+    return Container(
+      child: Scaffold(
+            appBar: AppBar(
+                title: Text(name),
+                leading: new IconButton(
+                    icon: new Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => ListsPage()));
+                    }),
+                  ),
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 30.0),
+                  child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search),
+                    hintText: AppLocalizations.of(context).translate('SearchHint')
+                    ),
 
+                  )
+                ),
+                Expanded(child: ListView.builder(
+                    itemCount: _resultsList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final Users user = _resultsList[index];
+                      print("${user.firstname} ${user.lastname}");
+                      return PersonList(user, id, name, context)
+                          .buildTitle(context);
+                    }))
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddPersonToList(id, name)),
+                );
+              },
+              child: Icon(Icons.add),
+            ),
+          )
+    );
+  }
+
+  /*
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -41,18 +153,28 @@ class ListPerson extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.search),
                     onPressed: () {
-                      showSearch(context: context, delegate: DataSearch(id));
+                      //showSearch(context: context, delegate: DataSearch(id));
                     },
                   )
                 ]),
-            body: ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final Users user = snapshot.data[index];
-                  print("${user.firstname} ${user.lastname}");
-                  return PersonList(user, id, name, context)
-                      .buildTitle(context);
-                }),
+            body: Column(
+              children: [
+                TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search)
+                  ),
+                ),
+                Expanded(child: ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final Users user = snapshot.data[index];
+                      print("${user.firstname} ${user.lastname}");
+                      return PersonList(user, id, name, context)
+                          .buildTitle(context);
+                    }))
+              ],
+            ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 Navigator.push(
@@ -76,7 +198,8 @@ class ListPerson extends StatelessWidget {
                   }),
             ),
             body: Center(
-              child: Text(AppLocalizations.of(context).translate("NoPersonInList")),
+              child: Text(
+                  AppLocalizations.of(context).translate("NoPersonInList")),
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
@@ -93,7 +216,7 @@ class ListPerson extends StatelessWidget {
       },
     );
   }
-
+*/
   Future<List<Users>> genCode() async {
     return await getAllUsersFromAList();
   }
@@ -125,6 +248,12 @@ class ListPerson extends StatelessWidget {
         }
       });
     });
+
+  setState(() {
+    _allResults = lists;
+  });
+  searchResultsList();
+
     return lists;
   }
 

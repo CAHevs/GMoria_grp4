@@ -16,6 +16,7 @@
     "FullListMode": "Jeu complet",
     "MistakesMode": "Jeu avec les fautes",
     "CustomMode": "Jeu variable",
+    "SelectGameMode": "Sélectionner le mode de jeu",
     "Of": "sur",
     "FinalScore": "Score final",
     "ResetQuiz": "Relancer",
@@ -36,7 +37,15 @@
     "MatchPwd": "Les mots de passes doivent être similaires",
     "ConfimPassword": "Confirmer le mot de passe",
     "Loading": "Chargement",
-    "WaitLoading": "Chargement, veuillez attendre"
+    "WaitLoading": "Chargement, veuillez attendre",
+    "ListTitle": "Mes listes",
+    "NoList": "Vous n'avez pas encore de liste",
+    "DeleteList": "Voulez-vous vraiment supprimer cette liste ?",
+    "Irreversible": "Cette action sera irréversible",
+    "Yes": "Oui, supprimer",
+    "No": "Non",
+    "Logout": "Se déconnecter",
+    "SearchHint": "Entrer un nom ou un prénom"
 
 
 }
