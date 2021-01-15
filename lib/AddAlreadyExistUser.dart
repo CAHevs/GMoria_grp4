@@ -91,11 +91,20 @@ class AddAlreadyExistUser extends StatelessWidget {
       );
     } else {
       return new Scaffold(
-        appBar: AppBar(
-          title: Text("add to $listName"),
-        ),
-        body: Text("All of your contact are already in this list !"),
-      );
+          appBar: AppBar(
+            title: Text("add to $listName"),
+            leading: new IconButton(
+                icon: new Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ListPerson(listId, listName)));
+                }),
+          ),
+          body: Center(
+            child: Text("All of your contact are already in this list !"),
+          ));
     }
   }
 }

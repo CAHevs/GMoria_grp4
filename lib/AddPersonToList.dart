@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gmoria_grp4/AddAlreadyExistUser.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/list_person.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
@@ -48,7 +49,7 @@ class _addPerson extends State<AddPersonToList> {
     getAllUsersFromAList();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add person"),
+        title: Text(AppLocalizations.of(context).translate('AddPerson')),
         leading: new IconButton(
             icon: new Icon(Icons.arrow_back),
             onPressed: () {
@@ -88,7 +89,7 @@ class _addPerson extends State<AddPersonToList> {
                   width: 300,
                   margin: new EdgeInsets.symmetric(vertical: 20.0),
                   child: TextButton(
-                    child: Text("Add existing user"),
+                    child: Text(AppLocalizations.of(context).translate('AddExistingUser')),
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -109,8 +110,8 @@ class _addPerson extends State<AddPersonToList> {
                     decoration: new InputDecoration(
                         border: new OutlineInputBorder(
                             borderSide: new BorderSide(color: Colors.grey)),
-                        hintText: 'firstname',
-                        labelText: 'firstname'),
+                        hintText: AppLocalizations.of(context).translate('Firstname'),
+                        labelText: AppLocalizations.of(context).translate('Firstname')),
                   )),
               Container(
                   width: 300,
@@ -124,14 +125,14 @@ class _addPerson extends State<AddPersonToList> {
                     decoration: new InputDecoration(
                         border: new OutlineInputBorder(
                             borderSide: new BorderSide(color: Colors.grey)),
-                        hintText: 'lastname',
-                        labelText: 'lastname'),
+                        hintText: AppLocalizations.of(context).translate('Lastname'),
+                        labelText: AppLocalizations.of(context).translate('Lastname')),
                   )),
               Container(
                   width: 300,
                   margin: new EdgeInsets.symmetric(vertical: 20.0),
                   child: TextButton(
-                    child: Text("Add an image"),
+                    child: Text(AppLocalizations.of(context).translate('AddAnImage')),
                     onPressed: () {
                       getImage();
                     },

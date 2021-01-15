@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/lists.dart';
 
 //Class to add list
@@ -15,7 +16,7 @@ class AddList extends StatelessWidget {
      userEmail = FirebaseFirestore.instance.collection(userLoggedIn.email);
      return Scaffold(
       appBar: AppBar(
-        title: Text("Add a new list"),
+        title: Text(AppLocalizations.of(context).translate('AddNewList')),
         
       ),
       body: Center(child: buildAddNewList(context)
@@ -53,8 +54,8 @@ class AddList extends StatelessWidget {
             border: new OutlineInputBorder(
               borderSide: new BorderSide(color: Colors.grey)
             ),
-            hintText: 'Enter the name of the list',
-            labelText: 'New List'
+            hintText: AppLocalizations.of(context).translate('HintNewList'),
+            labelText: AppLocalizations.of(context).translate('NewList')
           ),)
       )
     ],
@@ -64,13 +65,14 @@ class AddList extends StatelessWidget {
   Future<void> addNewList(){
     return userEmail.add({
       'name': newListName,
+      'score': 0,
     }).then((value) => print("List added"))
     .catchError((error) => print("Failed to add list: $error"));
   }
 }
 
 void showSnackBarHandler(BuildContext context){
-  var snackBar = SnackBar(content: Text("The name can not be empty"));
+  var snackBar = SnackBar(content: Text(AppLocalizations.of(context).translate('NameNoEmpty')));
 
   Scaffold.of(context).showSnackBar(snackBar);
 }

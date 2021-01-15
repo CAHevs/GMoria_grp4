@@ -116,12 +116,6 @@
       "languageVersion": "2.7"
     },
     {
-      "name": "easy_localization",
-      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/easy_localization-2.3.3",
-      "packageUri": "lib/",
-      "languageVersion": "2.7"
-    },
-    {
       "name": "fake_async",
       "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0-nullsafety.1",
       "packageUri": "lib/",
@@ -530,7 +524,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2021-01-15T07:34:29.156118Z",
+  "generated": "2021-01-15T08:37:51.736066Z",
   "generator": "pub",
   "generatorVersion": "2.10.3"
 }

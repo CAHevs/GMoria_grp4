@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/person_details.dart';
 import "package:flutter_swiper/flutter_swiper.dart";
 
@@ -23,7 +24,7 @@ Widget build(BuildContext context) {
         if (snapshot.hasData && snapshot.data.length > 0) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('Training mode'),
+              title: Text(AppLocalizations.of(context).translate("TrainingMode")),
             ),
             body:
                 Swiper(
@@ -42,9 +43,9 @@ Widget build(BuildContext context) {
         } else {
           return new Scaffold(
             appBar: AppBar(
-              title: Text('Training mode'),
+              title: Text(AppLocalizations.of(context).translate("TrainingMode")),
             ),
-            body: Text("No one is in this list"),
+            body: Text(AppLocalizations.of(context).translate("NoPersonInList")),
           );
         }
       },

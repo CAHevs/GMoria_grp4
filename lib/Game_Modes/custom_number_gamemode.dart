@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
+import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:quiver/async.dart';
 import '../lists.dart';
 import '../selection_mode.dart';
@@ -49,8 +50,6 @@ Future<List<Users>> getAllUsersFromAList(id, number) async {
     });
   });
 
-  //We shuffle the list for not have the same order permanently
-  list = shuffle(list);
 
   //If the number entered by the user is less than the people max, we automatically set it to the max value
   if (numericNumber > list.length) {
@@ -93,21 +92,6 @@ Future<void> updateScore(list, score) async {
       .update({'score': score});
 }
 
-//Method for shuffle list of users
-List<Users> shuffle(List<Users> items) {
-  var random = new Random();
-
-  for (var i = items.length - 1; i > 0; i--) {
-    // Pick a user number according to the list length
-    var n = random.nextInt(i + 1);
-
-    var temp = items[i];
-    items[i] = items[n];
-    items[n] = temp;
-  }
-
-  return items;
-}
 
 //Main class for the CustomNumberGamemode
 class CustomNumberGameMode extends StatefulWidget {
@@ -142,7 +126,7 @@ class CustomNumberGamemodeState extends State<CustomNumberGameMode> {
           return Scaffold(
               appBar: AppBar(
                 automaticallyImplyLeading: false,
-                title: Text('Custom gamemode'),
+                title: Text(AppLocalizations.of(context).translate("CustomMode")),
                 actions: <Widget>[
                   Padding(
                       padding: EdgeInsets.only(right: 20.0),
@@ -176,7 +160,7 @@ class CustomNumberGamemodeState extends State<CustomNumberGameMode> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 new Text(
-                                  "Question ${questionNumber + 1} of ${snapshot.data.length}",
+                                  "Question ${questionNumber + 1} / ${snapshot.data.length}",
                                   style: new TextStyle(fontSize: 22.0),
                                 ),
                                 new Text(
@@ -360,14 +344,14 @@ class Summary extends StatelessWidget {
       child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text("Normal game score !"),
+            title: Text(AppLocalizations.of(context).translate("FinalScore")),
           ),
           body: new Center(
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 new Text(
-                  "Final Score: $score",
+                  AppLocalizations.of(context).translate("FinalScore")+": $score",
                   style: new TextStyle(fontSize: 40.0),
                 ),
                 new Padding(
@@ -381,7 +365,7 @@ class Summary extends StatelessWidget {
                       refresh();
                       Navigator.pop(context);
                     },
-                    child: new Text("Reset Quiz",
+                    child: new Text(AppLocalizations.of(context).translate("ResetQuiz"),
                         style: new TextStyle(
                             fontSize: 40.0, color: Colors.white))),
                 new Padding(
@@ -391,7 +375,7 @@ class Summary extends StatelessWidget {
                     color: Colors.blue[400],
                     onPressed: () {
                       //Leave the game and update the score
-                      percentage = (score/total) * 100;
+                      percentage = (score / total) * 100;
                       updateScore(listId, percentage.truncate());
                       refresh();
                       Navigator.push(
@@ -399,7 +383,7 @@ class Summary extends StatelessWidget {
                           new MaterialPageRoute(
                               builder: (context) => new ListsPage()));
                     },
-                    child: new Text("Home",
+                    child: new Text(AppLocalizations.of(context).translate("Home"),
                         style:
                             new TextStyle(fontSize: 40.0, color: Colors.white)))
               ],
