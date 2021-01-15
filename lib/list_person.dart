@@ -173,17 +173,25 @@ class PersonList implements ListItem {
   Widget buildTitle(BuildContext context) {
     var heading = person.firstname + " " + person.lastname;
 
+    var image;
+    if(person.image == "images/profil.png"){
+      image = AssetImage("images/profil.png");
+    }else{
+      image = FileImage(File(person.image));
+    }
+
     return Slidable(
       actionPane: SlidableStrechActionPane(),
       actionExtentRatio: 0.25,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      child: Row(mainAxisAlignment: MainAxisAlignment.start, textDirection: TextDirection.rtl, children: [
         Expanded(
           child: CircleAvatar(
               radius: 55,
               backgroundColor: Colors.white,
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: FileImage(File(person.image)),
+                
+                backgroundImage: image,
               )),
         ),
         Container(

@@ -51,16 +51,23 @@ class PersonDetails extends StatelessWidget {
   }
 
   //Widget that will build all the fields
-  Widget buildAllInformation(BuildContext context) => Column(
+  Widget buildAllInformation(BuildContext context) {
+
+    var image;
+    if(selectedUser.image == "images/profil.png"){
+      image = Image.asset("images/profil.png", height: 300, width: 300);
+
+    }else{
+      image = Image.file(File(selectedUser.image), height: 300, width: 300,);
+    }
+
+    return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          ClipRRect(
+          ClipRRect( 
               borderRadius: BorderRadius.circular(20),
-              child: Image.file(
-                File(_image),
-                height: 300,
-                width: 300,
-              )),
+              child: image
+          ),
           IconButton(
               icon: Icon(Icons.add_a_photo),
               onPressed: () {
@@ -83,6 +90,7 @@ class PersonDetails extends StatelessWidget {
               )),
         ],
       );
+  } 
 
   //Method that will add/edit notes for a person
   Future<void> savePerson() {

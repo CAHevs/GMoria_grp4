@@ -14,6 +14,9 @@ class PersonCard extends StatelessWidget{
   
   @override
   Widget build(BuildContext context) {
+
+
+
      return Scaffold(
       appBar: AppBar(
         title: Text("Person Card"),
@@ -23,9 +26,20 @@ class PersonCard extends StatelessWidget{
       ),
     );
   }
-  
+
+
   //This widget will display in columns : the "more info" button, the picture of the person and his name
-  Widget buildInfoCard(BuildContext context) => Column (
+  Widget buildInfoCard(BuildContext context){
+
+    var image;
+    if(selectedUser.image == "images/profil.png"){
+      image = Image.asset("images/profil.png", height: 300, width: 300);
+
+    }else{
+      image = Image.file(File(selectedUser.image), height: 300, width: 300,);
+    }
+
+    return Column (
     mainAxisAlignment: MainAxisAlignment.start, 
     children: <Widget>[
       Align(alignment: Alignment.bottomRight,
@@ -35,12 +49,13 @@ class PersonCard extends StatelessWidget{
         }),),
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.file(File(selectedUser.image), height: 300, width: 300,)
+          child: image
         ),
       Padding(
         padding: EdgeInsets.all(30),
         child: Text(selectedUser.firstname + " " + selectedUser.lastname),
       ),
     ],
-  );
+    );
+  }
 }
