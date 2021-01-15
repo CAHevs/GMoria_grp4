@@ -51,6 +51,7 @@ Future<List<Users>> getAllUsersFromAList(id) async {
   return list;
 }
 
+//If the user does a mistake, it's set in the DB
 Future<void> updateMistakeStatus(personId) async {
   return FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser.email)
@@ -60,6 +61,7 @@ Future<void> updateMistakeStatus(personId) async {
       .update({'mistake': true});
 }
 
+//Update right answer in the db compared to personId
 Future<void> updateRightAnswerStatus(personId) async {
   return FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser.email)
@@ -69,6 +71,7 @@ Future<void> updateRightAnswerStatus(personId) async {
       .update({'mistake': false});
 }
 
+//Update score in the db
 Future<void> updateScore(list, score) async {
   return FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser.email)
@@ -105,7 +108,6 @@ class NormalGamemodeState extends State<NormalGameMode> {
       builder: (BuildContext context, AsyncSnapshot<List<Users>> snapshot) {
         if (snapshot.hasData && snapshot.data.length > 0) {
           final Users user = snapshot.data[questionNumber];
-          print(user.firstname+" "+user.lastname);
           return Scaffold(
               appBar: AppBar(
                 automaticallyImplyLeading: false,
@@ -344,6 +346,7 @@ class Summary extends StatelessWidget {
                     color: Colors.red,
                     onPressed: () {
                       percentage = (score / total) * 100;
+                      //Leave the game and update the score
                       updateScore(listId, percentage.truncate());
                       refresh();
                       Navigator.pop(context);

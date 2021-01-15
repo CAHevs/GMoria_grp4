@@ -24,7 +24,6 @@ Future<List<Users>> genCode(id) async {
 
 //Method for get all the people of a list
 Future<List<Users>> getAllUsersWithMistakesFromAList(id) async {
-  var firstname, lastname, image;
 List<Users> list = new List<Users>();
   Query query = FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser.email)
@@ -58,6 +57,7 @@ List<Users> list = new List<Users>();
 
 }
 
+//When we go home or retry, we update all the false and right answers in the db
 void udpateStatus() {
 
   for(var i = 0; i < rightAnswers.length; i++){
@@ -70,6 +70,7 @@ void udpateStatus() {
 
 }
 
+//If the user does a mistake, it's set in the DB
 Future<void> updateMistakeStatus(personId) async {
   return FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser.email)
@@ -79,6 +80,7 @@ Future<void> updateMistakeStatus(personId) async {
       .update({'mistake': true});
 }
 
+//Update right answer in the db compared to personId
 Future<void> updateRightAnswerStatus(personId) async {
   return FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser.email)
@@ -88,6 +90,7 @@ Future<void> updateRightAnswerStatus(personId) async {
       .update({'mistake': false});
 }
 
+//Update score in the db
 Future<void> updateScore(list, score) async {
   return FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser.email)
@@ -281,7 +284,7 @@ class MistakesGamemodeState extends State<MistakesGameMode> {
             appBar: AppBar(
               title: Text(AppLocalizations.of(context).translate("MistakesMode")),
             ),
-            body: Text("No one is in this list"),
+            body: Text(AppLocalizations.of(context).translate("NoPersonInList")),
           );
         }
       },
@@ -307,7 +310,7 @@ class MistakesGamemodeState extends State<MistakesGameMode> {
   //Update the next question or go to the summary screen at the end of the game
   Future<void> update(allUsers, total, listId) async {
 
-    print(total);
+
 
     void refresh() {
       setState(() {
@@ -371,6 +374,7 @@ class Summary extends StatelessWidget {
                 new MaterialButton(
                     color: Colors.red,
                     onPressed: () {
+                      //Leave the game and update the score
                       percentage = (score / total) * 100;
                       updateScore(listId, percentage.truncate());
                       udpateStatus();

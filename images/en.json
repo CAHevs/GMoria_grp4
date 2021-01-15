@@ -45,7 +45,8 @@
     "Yes": "Yes, delete",
     "No": "No",
     "Logout": "Logout",
-    "SearchHint": "Enter a firstname or name"
+    "SearchHint": "Enter a firstname or name",
+    "DeleteAccount": "Are you sure you want to delete this account ?"
 
 
 }

@@ -4,6 +4,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+
+
+//Main class with constructor that receives the language of the smartphone
 class AppLocalizations {
   final Locale locale;
 
@@ -15,10 +18,12 @@ class AppLocalizations {
 
   }
 
+  //Allow to delegate
   static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   Map<String, String> _localizedStrings;
 
+  //Method to load json files
   Future<bool> load() async {
 
     //Load the language json from the images folder
@@ -35,6 +40,7 @@ class AppLocalizations {
 
   }
 
+  //Method that return the right value compared to entered key
   String translate(String key){
 
     return _localizedStrings[key];
@@ -44,6 +50,8 @@ class AppLocalizations {
 
 }
 
+
+//Class that handle supported language and load language of the smartphone
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations>{
 
     const _AppLocalizationsDelegate();

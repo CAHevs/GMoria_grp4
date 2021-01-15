@@ -51,12 +51,12 @@ class SettingsPage extends StatelessWidget {
 
   Widget _buildPopupDialog(BuildContext context) {
     return new AlertDialog(
-      title: const Text('Are you sure you want to delete your account ?'),
+      title: new Text(AppLocalizations.of(context).translate("DeleteAccount")),
       content: new Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("This action is irreversible"),
+          Text(AppLocalizations.of(context).translate("Irreversible")),
         ],
       ),
       actions: <Widget>[
@@ -65,14 +65,14 @@ class SettingsPage extends StatelessWidget {
             deleteAccount(context);
           },
           textColor: Theme.of(context).primaryColor,
-          child: const Text('Yes, delete'),
+          child: new Text(AppLocalizations.of(context).translate("Yes")),
         ),
         new FlatButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           textColor: Theme.of(context).primaryColor,
-          child: const Text('No'),
+          child: new Text(AppLocalizations.of(context).translate("No")),
         ),
       ],
     );

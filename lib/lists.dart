@@ -13,11 +13,13 @@ import 'package:gmoria_grp4/selection_mode.dart';
 import 'package:gmoria_grp4/settings.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+//Class to add
 class ListsPage extends StatefulWidget {
   @override
   _Lists createState() => _Lists();
 }
 
+//State of the lists
 class _Lists extends State<ListsPage> {
   var firestoreInstance = FirebaseFirestore.instance;
   var firestoreUser = FirebaseAuth.instance.currentUser;
@@ -34,7 +36,8 @@ class _Lists extends State<ListsPage> {
           if (snapshot.hasData && snapshot.data.length > 0) {
             return Scaffold(
               appBar: AppBar(
-                title: Text(AppLocalizations.of(context).translate("ListTitle")),
+                title:
+                    Text(AppLocalizations.of(context).translate("ListTitle")),
               ),
               //Drawer with the settings and the button to delete account
               drawer: new Drawer(
@@ -57,10 +60,12 @@ class _Lists extends State<ListsPage> {
                     new ListTile(
                         title: new Text(
                             AppLocalizations.of(context).translate('Logout')),
-                        onTap: () async{
+                        onTap: () async {
                           await FirebaseAuth.instance.signOut();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginPage()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
                         })
                   ],
                 ),
@@ -88,7 +93,8 @@ class _Lists extends State<ListsPage> {
           } else {
             return new Scaffold(
               appBar: AppBar(
-                title: Text(AppLocalizations.of(context).translate("ListTitle")),
+                title:
+                    Text(AppLocalizations.of(context).translate("ListTitle")),
               ),
               drawer: new Drawer(
                 child: ListView(
@@ -105,6 +111,16 @@ class _Lists extends State<ListsPage> {
                             MaterialPageRoute(
                                 builder: (context) => SettingsPage()),
                           );
+                        }),
+                    new ListTile(
+                        title: new Text(
+                            AppLocalizations.of(context).translate('Logout')),
+                        onTap: () async {
+                          await FirebaseAuth.instance.signOut();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
                         })
                   ],
                 ),
@@ -140,7 +156,7 @@ class _Lists extends State<ListsPage> {
         }
       });
     });
-    print(lists.length);
+
     return lists;
   }
 }
@@ -168,78 +184,76 @@ class MainPageItem implements ListItem {
 
   Widget buildTitle(BuildContext context) {
     return Slidable(
-      actionPane: SlidableStrechActionPane(),
-      actionExtentRatio: 0.25,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
-          Widget>[
-        Container(
-            child: Row(children: [
-          InkWell(
-            child: Text(
-              name,
-              style: Theme.of(context).textTheme.headline5,
-            ),
+        actionPane: SlidableStrechActionPane(),
+        actionExtentRatio: 0.25,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                  child: Row(children: [
+                InkWell(
+                  child: Text(
+                    name,
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ListPerson(id, name)),
+                    );
+                  },
+                  onLongPress: () {},
+                )
+              ])),
+              Container(
+                  child: Row(children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context).translate('lastScore'),
+                      style: TextStyle(fontSize: 25.0, color: Colors.black87),
+                    ),
+                    Text(
+                      "$score" + "%",
+                      style: TextStyle(fontSize: 20.0, color: Colors.black54),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                        icon: Icon(Icons.play_circle_outline),
+                        disabledColor: Colors.red,
+                        iconSize: 45,
+                        //go to the selection mode page
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    SelectionModPage(id, name)),
+                          );
+                        })
+                  ],
+                )
+              ])),
+            ]),
+        secondaryActions: <Widget>[
+          IconSlideAction(
+            caption: AppLocalizations.of(context).translate('Delete'),
+            color: Colors.red,
+            icon: Icons.delete,
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ListPerson(id, name)),
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => _buildPopupDialog(context),
               );
             },
-            onLongPress: () {
-              print("edit the list " + name);
-            },
           )
-        ])),
-        Container(
-            child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppLocalizations.of(context).translate('lastScore'),
-                  style: TextStyle(fontSize: 25.0, color: Colors.black87),
-                ),
-                Text(
-                  "$score" + "%",
-                  style: TextStyle(fontSize: 20.0, color: Colors.black54),
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IconButton(
-                    icon: Icon(Icons.play_circle_outline),
-                    disabledColor: Colors.red,
-                    iconSize: 45,
-                    //go to the selection mode page
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SelectionModPage(id, name)),
-                      );
-                    })
-              ],
-            )
-          ])),
-        ]),
-        
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: AppLocalizations.of(context).translate('Delete'),
-          color: Colors.red,
-          icon: Icons.delete,
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) => _buildPopupDialog(context),
-            );
-          },
-        )
-      ]
-    );
+        ]);
   }
 
   Widget _buildPopupDialog(BuildContext context) {

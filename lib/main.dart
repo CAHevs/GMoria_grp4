@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
                   body: LoginPage(),
                   //go to the login page
                 ),
+                //Support multi-language
                 supportedLocales: [
                   Locale('en', 'US'),
                   Locale('fr', 'FR')
@@ -78,6 +79,7 @@ class MyApp extends StatelessWidget {
                   body:
                       ListsPage(), //go to the list page and give the user loged in
                 ),
+                //Support multi-language
                 supportedLocales: [
                   Locale('en', 'US'),
                   Locale('fr', 'FR')
