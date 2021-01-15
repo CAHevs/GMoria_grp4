@@ -9,7 +9,6 @@ import 'Game_Modes/mistakes_gamemode.dart';
 import 'Game_Modes/normal_gamemode.dart';
 import 'package:gmoria_grp4/lists.dart';
 
-bool _mistakesButton = false;
 
 //Page with the game and train buttons
 class SelectionModPage extends StatelessWidget {
@@ -21,7 +20,6 @@ class SelectionModPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    genCode(id);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate("SelectGameMode")),
@@ -52,10 +50,7 @@ class SelectionModeRows extends StatelessWidget {
       children: <Widget>[
         TrainingModeButton(id, listName).buildTitle(context),
         FullListGameModeButton(id, listName).buildTitle(context),
-        Visibility(
-          visible: _mistakesButton,
-          child: MistakesModeButton(id, listName).buildTitle(context),
-        ),
+        MistakesModeButton(id, listName).buildTitle(context),
         NumberModeButton(id, listName).buildTitle(context)
       ],
     ));
@@ -233,38 +228,4 @@ class FullListGameModeButton implements ModeButton {
           );
         });
   }
-}
-
-//Method for get all the people of a list
-Future<void> genCode(id) async {
-  return await getAllUsersWithMistakesFromAList(id);
-}
-
-//Method for get all the people of a list
-Future<void> getAllUsersWithMistakesFromAList(id) async {
-  var firstname, lastname, image;
-  List<Users> list = new List<Users>();
-  Query query = FirebaseFirestore.instance
-      .collection(FirebaseAuth.instance.currentUser.email)
-      .doc("users")
-      .collection("users");
-  await query.get().then((querySnapshot) async {
-    querySnapshot.docs.forEach((document) {
-      String array = document.data()["lists"].toString();
-
-      for (var i = 1; i < array.length; i++) {
-        if (array[i] == ',' || array[i] == ']') {
-          if (id == array.substring(i - 20, i)) {
-            //If the list is empty, it let the mistake button disable, if not, it shows it
-            if (document.data()["mistake"] == true) {
-              
-              _mistakesButton = true;
-              print("Button $_mistakesButton");
-            }
-          }
-        }
-      }
-    });
-  });
-
 }
