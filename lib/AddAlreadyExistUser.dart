@@ -1,12 +1,12 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gmoria_grp4/Game_Modes/mistakes_gamemode.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
 import 'package:gmoria_grp4/list_person.dart';
 
-//Class containing the list with all person inside a selected list and display them
+//Class to add a user that already exist in the app in a list
 class AddAlreadyExistUser extends StatelessWidget {
   final List<Users> availableUser;
   final String listName;
@@ -35,9 +35,15 @@ class AddAlreadyExistUser extends StatelessWidget {
             itemCount: availableUser.length,
             itemBuilder: (BuildContext context, int index) {
               final Users user = availableUser.elementAt(index);
-              print("${user.firstname} ${user.lastname}");
+              //If the person doesn't have a picture in the DB, display the default picture
+              var image;
+              if(user.image == "images/profil.png"){
+                image = AssetImage("images/profil.png");
+              }else{
+                image = FileImage(File(user.image));
+              }
               return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start, textDirection: TextDirection.rtl,
                   children: [
                     Expanded(
                       child: CircleAvatar(
@@ -45,7 +51,7 @@ class AddAlreadyExistUser extends StatelessWidget {
                           backgroundColor: Colors.white,
                           child: CircleAvatar(
                             radius: 50,
-                            backgroundImage: FileImage(File(user.image)),
+                            backgroundImage: image
                           )),
                     ),
                     Container(

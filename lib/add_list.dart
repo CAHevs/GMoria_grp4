@@ -25,7 +25,6 @@ class AddList extends StatelessWidget {
             onPressed: () {
               //Check if the textfield is null or empty to avoid inserting a false
               if(newListName == null || newListName.isEmpty){
-                //showSnackBarHandler(context);
                 print("Name can not be empty");
               }
               else{
@@ -71,6 +70,7 @@ class AddList extends StatelessWidget {
   }
 }
 
+//Method to show the SnackBar
 void showSnackBarHandler(BuildContext context){
   var snackBar = SnackBar(content: Text(AppLocalizations.of(context).translate('NameNoEmpty')));
 

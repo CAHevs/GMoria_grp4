@@ -6,7 +6,6 @@ import 'package:gmoria_grp4/Setup/signIn.dart';
 import 'package:gmoria_grp4/Setup/somethingWentWrong.dart';
 import 'package:gmoria_grp4/lists.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'app_localizations.dart';
 
 void main() {

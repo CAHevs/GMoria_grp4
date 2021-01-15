@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +9,7 @@ import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-//Class based on add_list.dart to add a person to the list
+//Class to edit a person's info
 class EditPerson extends StatefulWidget {
   final String listId;
   final String listName;
@@ -80,6 +79,7 @@ class _editPerson extends State<EditPerson> {
     );
   }
 
+  //Build the widget
   Widget buildEditPersonToList(BuildContext context) => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -134,6 +134,7 @@ class _editPerson extends State<EditPerson> {
         ],
       );
 
+  //Edit the selected person in the DB
   Future<void> editList() {
     if (_image == "") {
       _image = personToModify.image;
@@ -149,6 +150,7 @@ class _editPerson extends State<EditPerson> {
         .catchError((error) => print("Failed to modify person: $error"));
   }
 
+  //Get an image from the gallery to change the person's image
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {

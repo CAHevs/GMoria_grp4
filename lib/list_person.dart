@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,8 +22,6 @@ class ListPerson extends StatefulWidget {
 
 //Class containing the list with all person inside a selected list and display them
 class _ListPersonState extends State<ListPerson> {
-
-
 
   TextEditingController _searchController = TextEditingController();
   final String id;
@@ -84,6 +81,7 @@ class _ListPersonState extends State<ListPerson> {
   var firestoreInstance = FirebaseFirestore.instance;
   var firestoreUser = FirebaseAuth.instance.currentUser;
   
+  //Build the widget
   Widget build(BuildContext context){
     return Container(
       child: Scaffold(
@@ -133,90 +131,7 @@ class _ListPersonState extends State<ListPerson> {
     );
   }
 
-  /*
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: genCode(),
-      builder: (BuildContext context, AsyncSnapshot<List<Users>> snapshot) {
-        if (snapshot.hasData && snapshot.data.length > 0) {
-          return Scaffold(
-            appBar: AppBar(
-                title: Text(name),
-                leading: new IconButton(
-                    icon: new Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ListsPage()));
-                    }),
-                actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {
-                      //showSearch(context: context, delegate: DataSearch(id));
-                    },
-                  )
-                ]),
-            body: Column(
-              children: [
-                TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search)
-                  ),
-                ),
-                Expanded(child: ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final Users user = snapshot.data[index];
-                      print("${user.firstname} ${user.lastname}");
-                      return PersonList(user, id, name, context)
-                          .buildTitle(context);
-                    }))
-              ],
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddPersonToList(id, name)),
-                );
-              },
-              child: Icon(Icons.add),
-            ),
-          );
-        } else {
-          return new Scaffold(
-            appBar: AppBar(
-              title: Text(name),
-              leading: new IconButton(
-                  icon: new Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ListsPage()));
-                  }),
-            ),
-            body: Center(
-              child: Text(
-                  AppLocalizations.of(context).translate("NoPersonInList")),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddPersonToList(id, name)),
-                );
-              },
-              child: Icon(Icons.add),
-            ),
-          );
-        }
-      },
-    );
-  }
-*/
+  //Method to call getAllUsersFromAList
   Future<List<Users>> genCode() async {
     return await getAllUsersFromAList();
   }
@@ -257,6 +172,7 @@ class _ListPersonState extends State<ListPerson> {
     return lists;
   }
 
+  //Method to get a specific person
   Users getSpecificUser(var userId) {
     var firstname, lastname, image, note;
     firestoreInstance
@@ -272,12 +188,6 @@ class _ListPersonState extends State<ListPerson> {
         image = documentSnapshot.data()["image"];
         note = documentSnapshot.data()["note"];
         Users user = new Users(userId, firstname, lastname, image, note);
-        print("Inside getSpecificUser " +
-            userId +
-            " " +
-            firstname +
-            " " +
-            lastname);
         return user;
       } else {
         print("doc not exists");
@@ -305,6 +215,7 @@ class PersonList implements ListItem {
   Widget buildTitle(BuildContext context) {
     var heading = person.firstname + " " + person.lastname;
 
+    //If the person doesn't have a picture in the DB, display the default picture
     var image;
     if(person.image == "images/profil.png"){
       image = AssetImage("images/profil.png");
@@ -322,7 +233,6 @@ class PersonList implements ListItem {
               backgroundColor: Colors.white,
               child: CircleAvatar(
                 radius: 50,
-                
                 backgroundImage: image,
               )),
         ),
@@ -359,6 +269,7 @@ class PersonList implements ListItem {
     );
   }
 
+  //Method to delete a person
   void deletePerson() {
     List<String> finalListPerson = person.lists;
     String stringToRemove = "";
@@ -373,8 +284,8 @@ class PersonList implements ListItem {
 
     finalListPerson.remove(stringToRemove);
 
-    print(finalListPerson);
-
+    //If the deleted person was inside only one list, delete the person in the DB,
+    //if not delete it only from the list
     if (finalListPerson.isNotEmpty) {
       FirebaseFirestore.instance
           .collection(FirebaseAuth.instance.currentUser.email)

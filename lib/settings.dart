@@ -5,6 +5,7 @@ import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/Setup/signIn.dart';
 import 'package:gmoria_grp4/lists.dart';
 
+//Class to create a settings page
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -49,6 +50,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
+  //Build the widget for a Popup that will ask to confirm before deleting the account
   Widget _buildPopupDialog(BuildContext context) {
     return new AlertDialog(
       title: const Text('Are you sure you want to delete your account ?'),
@@ -78,6 +80,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
+  //Method to delete the account
   void deleteAccount(BuildContext context) async {
     FirebaseAuth.instance.currentUser
         .delete()

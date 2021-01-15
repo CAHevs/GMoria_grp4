@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,7 +45,7 @@ class _addPerson extends State<AddPersonToList> {
         .collection(userLoggedIn.email)
         .doc("users")
         .collection("users");
-    getAllUsersFromAList();
+    getAllUsersNotInTheList();
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate('AddPerson')),
@@ -79,6 +78,7 @@ class _addPerson extends State<AddPersonToList> {
     );
   }
 
+  //Build the widget
   Widget buildAddPersonToList(BuildContext context) => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -142,6 +142,7 @@ class _addPerson extends State<AddPersonToList> {
         ],
       );
 
+  //Add the user in the database
   Future<void> addNewList() {
     if (_image == "") {
       _image = "images/profil.png"; //image par défaut
@@ -159,6 +160,7 @@ class _addPerson extends State<AddPersonToList> {
         .catchError((error) => print("Failed to add list: $error"));
   }
 
+  //Get the image from the gallery
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -180,7 +182,8 @@ class _addPerson extends State<AddPersonToList> {
     }
   }
 
-  void getAllUsersFromAList() async {
+  //Get all the users that are not inside the list
+  void getAllUsersNotInTheList() async {
     Query query = firestoreInstance
         .collection(firestoreUser.email)
         .doc("users")
@@ -189,6 +192,7 @@ class _addPerson extends State<AddPersonToList> {
       querySnapshot.docs.forEach((document) {
         String array = document.data()["lists"].toString();
 
+        //Add all the people in the list
         personNotInTheList.add(new Users.withlist(
             document.id,
             document.data()["firstname"],
@@ -197,6 +201,7 @@ class _addPerson extends State<AddPersonToList> {
             document.data()["note"],
             document.data()["lists"].cast<String>().toList()));
 
+        //Remove the person already in the list
         for (var i = 1; i < array.length; i++) {
           if (array[i] == ',' || array[i] == ']') {
             if (listId == array.substring(i - 20, i)) {

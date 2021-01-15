@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/app_localizations.dart';
 
-//display something when the page is loading
+//display a message when the page is loading
 class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

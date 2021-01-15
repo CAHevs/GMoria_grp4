@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -103,6 +105,15 @@ class SwipeableCard extends StatelessWidget {
   SwipeableCard(this.user, this.listId, this.listName);
 
   Widget build(BuildContext context) {
+
+    //If the person doesn't have a picture in the DB, display the default picture
+    var image;
+    if(user.image == "images/profil.png"){
+      image = Image.asset("images/profil.png", height: 300, width: 300);
+    }else{
+      image = Image.file(File(user.image), height: 300, width: 300,);
+    }
+
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -119,11 +130,7 @@ class SwipeableCard extends StatelessWidget {
           ),
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Image.network(
-                              user.image,
-                              height: 300,
-                              width: 300,
-                            ),
+            child: image
           ),
           Padding(
             padding: EdgeInsets.all(30),

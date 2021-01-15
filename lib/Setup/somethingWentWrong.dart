@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//display something if the app has an error
+//display a message if the app encounter an error
 class SomethingWentWrong extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

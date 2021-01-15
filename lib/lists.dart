@@ -11,7 +11,6 @@ import 'package:gmoria_grp4/app_localizations.dart';
 import 'package:gmoria_grp4/list_person.dart';
 import 'package:gmoria_grp4/selection_mode.dart';
 import 'package:gmoria_grp4/settings.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 class ListsPage extends StatefulWidget {
   @override
@@ -69,11 +68,9 @@ class _Lists extends State<ListsPage> {
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
                     final ListObject listObject = snapshot.data[index];
-                    //return MainPageItem(listObject.id, listObject.name, listObject.score)
                     return MainPageItem(listObject.id, listObject.name,
                             listObject.score, context)
                         .buildTitle(context);
-                    //method to test that the long press work(for the edit function)
                   }),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
@@ -140,7 +137,6 @@ class _Lists extends State<ListsPage> {
         }
       });
     });
-    print(lists.length);
     return lists;
   }
 }
@@ -159,7 +155,6 @@ class MainPageItem implements ListItem {
   final int score;
   final BuildContext context;
 
-  //MainPageItem(this.id, this.heading);
   MainPageItem(this.id, this.name, this.score, this.context);
 
   List<Users> personInList = new List<Users>();
@@ -184,9 +179,6 @@ class MainPageItem implements ListItem {
                 context,
                 MaterialPageRoute(builder: (context) => ListPerson(id, name)),
               );
-            },
-            onLongPress: () {
-              print("edit the list " + name);
             },
           )
         ])),
@@ -271,8 +263,8 @@ class MainPageItem implements ListItem {
     );
   }
 
+  //Method to delete a list
   void deleteList() async {
-    //delete all person in the list
 
     Query query = firestoreInstance
         .collection(firestoreUser.email)
@@ -298,6 +290,7 @@ class MainPageItem implements ListItem {
       });
     });
 
+    //Remove each person inside the deleted list
     personInList.forEach((person) {
       List<String> finalListPerson = person.lists;
       String stringToRemove = "";
@@ -345,6 +338,7 @@ class MainPageItem implements ListItem {
         context, MaterialPageRoute(builder: (context) => ListsPage()));
   }
 
+  //Method to get all person in the list
   Future<void> getAllUsersFromAList() async {
     Query query = firestoreInstance
         .collection(firestoreUser.email)

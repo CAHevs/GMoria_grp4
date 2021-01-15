@@ -18,7 +18,6 @@ class PersonDetails extends StatelessWidget {
 
   PersonDetails(this.selectedUser, this.listId, this.listName, [this.image = ""]);
 
-
   var notes;
   String _image;
   final picker = ImagePicker();
@@ -53,6 +52,7 @@ class PersonDetails extends StatelessWidget {
   //Widget that will build all the fields
   Widget buildAllInformation(BuildContext context) {
 
+    //If the person doesn't have a picture in the DB, display the default picture
     var image;
     if(selectedUser.image == "images/profil.png"){
       image = Image.asset("images/profil.png", height: 300, width: 300);
@@ -102,6 +102,7 @@ class PersonDetails extends StatelessWidget {
         .update({'note': notes, 'image': _image});
   }
 
+  //Method to get an image from the gallery
   Future getImage(BuildContext context) async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {

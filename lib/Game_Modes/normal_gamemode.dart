@@ -1,10 +1,9 @@
-import 'dart:math';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
 import 'package:gmoria_grp4/app_localizations.dart';
-import 'package:quiver/async.dart';
 import '../lists.dart';
 import '../selection_mode.dart';
 
@@ -105,7 +104,15 @@ class NormalGamemodeState extends State<NormalGameMode> {
       builder: (BuildContext context, AsyncSnapshot<List<Users>> snapshot) {
         if (snapshot.hasData && snapshot.data.length > 0) {
           final Users user = snapshot.data[questionNumber];
-          print(user.firstname+" "+user.lastname);
+
+          //If the person doesn't have a picture in the DB, display the default picture
+          var image;
+          if(user.image == "images/profil.png"){
+          image = Image.asset("images/profil.png", height: 300, width: 300);
+          }else{
+            image = Image.file(File(user.image), height: 300, width: 300,);
+          }
+
           return Scaffold(
               appBar: AppBar(
                 automaticallyImplyLeading: false,
@@ -157,11 +164,7 @@ class NormalGamemodeState extends State<NormalGameMode> {
                           //Image
                           new ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              user.image,
-                              height: 300,
-                              width: 300,
-                            ),
+                            child: image
                           ),
 
                           new Padding(padding: EdgeInsets.all(20.0)),

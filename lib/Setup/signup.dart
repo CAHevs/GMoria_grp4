@@ -72,6 +72,7 @@ class _SignUpPageState extends State<SignupPage> {
     );
   }
 
+  //Method to create a user in Firebase
   Future<void> signUp() async {
     final formState = _formKey.currentState;
     if (formState.validate()) {

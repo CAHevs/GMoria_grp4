@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Objects/Users.dart';
 import 'package:gmoria_grp4/app_localizations.dart';
@@ -16,8 +15,6 @@ class PersonCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-
-
      return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate("PersonCard")),
@@ -32,6 +29,7 @@ class PersonCard extends StatelessWidget{
   //This widget will display in columns : the "more info" button, the picture of the person and his name
   Widget buildInfoCard(BuildContext context){
 
+    //If the person doesn't have a picture in the DB, display the default picture
     var image;
     if(selectedUser.image == "images/profil.png"){
       image = Image.asset("images/profil.png", height: 300, width: 300);
