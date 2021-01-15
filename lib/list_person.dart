@@ -10,6 +10,7 @@ import 'package:gmoria_grp4/lists.dart';
 import 'package:gmoria_grp4/person_card.dart';
 import 'AddPersonToList.dart';
 
+//Stateful list of persons because of the search bar
 class ListPerson extends StatefulWidget {
   final String id;
   final String name;
@@ -20,7 +21,7 @@ class ListPerson extends StatefulWidget {
 
 }
 
-//Class containing the list with all person inside a selected list and display them
+//State class containing the list with all person inside a selected list and display them with the search bar
 class _ListPersonState extends State<ListPerson> {
 
   TextEditingController _searchController = TextEditingController();
@@ -31,12 +32,14 @@ class _ListPersonState extends State<ListPerson> {
   Future resultsLoaded;
   _ListPersonState(this.id, this.name);
 
+  //Init the search listener
   @override
   void initState(){
     super.initState();
     _searchController.addListener(_onSearchChanged);
   }
 
+  //Remove the search controller
   @override
   void dispose(){
     _searchController.removeListener(_onSearchChanged);
@@ -44,6 +47,7 @@ class _ListPersonState extends State<ListPerson> {
     super.dispose();
   }
 
+  //Recupe the list of users in the list
   @override
   void didChangeDependencies(){
     super.didChangeDependencies();
@@ -52,9 +56,9 @@ class _ListPersonState extends State<ListPerson> {
 
   _onSearchChanged(){
     searchResultsList();
-    print(_searchController.text);
   }
 
+  //Update the list compared to the search
   searchResultsList(){
     var showResults = [];
 
@@ -81,7 +85,7 @@ class _ListPersonState extends State<ListPerson> {
   var firestoreInstance = FirebaseFirestore.instance;
   var firestoreUser = FirebaseAuth.instance.currentUser;
   
-  //Build the widget
+  //Show the list with the search bar
   Widget build(BuildContext context){
     return Container(
       child: Scaffold(
@@ -111,7 +115,6 @@ class _ListPersonState extends State<ListPerson> {
                     itemCount: _resultsList.length,
                     itemBuilder: (BuildContext context, int index) {
                       final Users user = _resultsList[index];
-                      print("${user.firstname} ${user.lastname}");
                       return PersonList(user, id, name, context)
                           .buildTitle(context);
                     }))
@@ -131,7 +134,7 @@ class _ListPersonState extends State<ListPerson> {
     );
   }
 
-  //Method to call getAllUsersFromAList
+//Method to generate the people in the list
   Future<List<Users>> genCode() async {
     return await getAllUsersFromAList();
   }

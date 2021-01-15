@@ -75,6 +75,7 @@ Future<void> updateMistakeStatus(personId) async {
       .update({'mistake': true});
 }
 
+//Update right answer in the db compared to personId
 Future<void> updateRightAnswerStatus(personId) async {
   return FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser.email)
@@ -84,6 +85,7 @@ Future<void> updateRightAnswerStatus(personId) async {
       .update({'mistake': false});
 }
 
+//Update score in the db
 Future<void> updateScore(list, score) async {
   return FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser.email)
@@ -278,9 +280,9 @@ class CustomNumberGamemodeState extends State<CustomNumberGameMode> {
           //If nobody in the list
           return new Scaffold(
             appBar: AppBar(
-              title: Text('Custom gamemode'),
+              title: Text(AppLocalizations.of(context).translate("CustomMode")),
             ),
-            body: Text("No one is in this list"),
+            body: Text(AppLocalizations.of(context).translate("NoPersonInList")),
           );
         }
       },
@@ -366,6 +368,7 @@ class Summary extends StatelessWidget {
                 new MaterialButton(
                     color: Colors.red,
                     onPressed: () {
+                      //Leave the game and update the score
                       percentage = (score / total) * 100;
                       updateScore(listId, percentage.truncate());
                       refresh();

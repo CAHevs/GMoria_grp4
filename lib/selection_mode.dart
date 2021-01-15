@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gmoria_grp4/Game_Modes/training_mode.dart';
-import 'package:gmoria_grp4/Objects/Users.dart';
 import 'package:gmoria_grp4/app_localizations.dart';
 import 'Game_Modes/custom_number_gamemode.dart';
 import 'Game_Modes/mistakes_gamemode.dart';
@@ -37,6 +35,7 @@ class SelectionModPage extends StatelessWidget {
   }
 }
 
+//Page with all buttons displayed
 class SelectionModeRows extends StatelessWidget {
   final String id;
   final String listName;
@@ -62,6 +61,7 @@ abstract class ModeButton {
   Widget buildTitle(BuildContext context);
 }
 
+//Custom number mode button
 class NumberModeButton implements ModeButton {
   final String id;
   var number;
@@ -121,6 +121,7 @@ class NumberModeButton implements ModeButton {
   }
 }
 
+//Mistakes mode button
 class MistakesModeButton implements ModeButton {
   final String id;
   final String listName;
@@ -193,7 +194,7 @@ class TrainingModeButton implements ModeButton {
   }
 }
 
-//Training mode button
+//Full list mode button
 class FullListGameModeButton implements ModeButton {
   final String id;
   final String listName;

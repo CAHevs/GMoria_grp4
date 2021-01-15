@@ -45,7 +45,8 @@
     "Yes": "Oui, supprimer",
     "No": "Non",
     "Logout": "Se déconnecter",
-    "SearchHint": "Entrer un nom ou un prénom"
+    "SearchHint": "Entrer un nom ou un prénom",
+    "DeleteAccount": "Voulez-vous vraiment supprimer le compte ?"
 
 
 }
